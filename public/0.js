@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[0],{117:function(t,e,n){"use strict";n.r(e);var i=n(1),r=Object(i.a)({},(function(){var t=this.$createElement,e=this._self._c||t;return e("v-slide-y-transition",{attrs:{mode:"out-in"}},[e("router-view")],1)}),[],!1,null,null,null);e.default=r.exports}}]);
+//# sourceMappingURL=0.js.map
