@@ -2,7 +2,7 @@ export default {
     namespaced:true,
     state : {
         BeforeUrl : null,
-        urlDefault : 'http://localhost:8000/'
+        urlDefault : 'http://development.codehunter.academy/'
 
     },
     mutations : {
