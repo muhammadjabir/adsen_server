@@ -138,7 +138,7 @@ class CoursesController extends Controller
         $request_validation = [
             'slug' => Str::slug($request->name,'-')
         ];
-        $validator = \Validator::make($request, [
+        $validator = \Validator::make($request_validation, [
             'slug' => 'required|unique:courses,slug,' .$id,
         ],[
             '*.unique' => 'Courses Sudah Tersedia'
