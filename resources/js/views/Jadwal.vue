@@ -1,7 +1,7 @@
 <template>
 <v-container class="text-center">
     <div class="images">
-     <img :src="urlDefault + `storage/code-hunter-logo-hitam-1024x258.png`" width="300px">
+     <img src="https://redhunter.id/wp-content/uploads/2020/01/redhunter-logo-1.png" width="300px">
     </div>
     <v-simple-table>
     <template v-slot:default>
