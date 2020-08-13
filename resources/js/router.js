@@ -13,7 +13,7 @@ import CoursesRouter from './routes/Courses'
 import StudentRouter from './routes/Students'
 import ScheduleRouter from './routes/Schedule'
 import JadwalRouter from './routes/Jadwal'
-
+import LeadsRouter from './routes/Leads'
 // import Vuetify from 'vuetify'
 // Vue.use(Vuetify)
 import './plugins/vuetify.js'
@@ -43,7 +43,8 @@ const router = new Router({
             CoursesRouter,
             StudentRouter,
             ScheduleRouter,
-            JadwalRouter
+            JadwalRouter,
+            LeadsRouter
         ]
 
     },

@@ -23,6 +23,7 @@ Route::post('/logout', 'AuthJWT\AuthController@logout');
 Route::post('/edit-profile','AuthJWT\AuthController@EditProfile');
 Route::get('/jadwal','Schedule\ScheduleController@api_schedule');
 Route::get('/class-register','openApi\ClassApi@index');
+Route::post('/register-calon','openApi\ClassApi@create');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -36,12 +37,14 @@ Route::get('/role-management/{id}/edit','Role\RoleManagementController@edit');
 Route::post('/courses/status','Courses\CoursesController@ChangeStatus');
 Route::post('/class-management/status','Kelas\KelasController@ChangeStatus');
 Route::get('/students/class', 'Students\StudentsController@kelas');
+Route::get('/ganti-status', 'Resepcionist\ResepcionistController@changeStatus');
 Route::resource('masterdata', 'Masterdata\MasterdataController');
 Route::resource('menu', 'Menu\MenuController');
 Route::resource('users', 'Users\UsersController');
 Route::resource('trainers', 'Users\TrainersController');
 Route::resource('class-management', 'Kelas\KelasController');
 Route::resource('courses', 'Courses\CoursesController');
+Route::resource('leads', 'Resepcionist\ResepcionistController');
 
 Route::resource('students', 'Students\StudentsController');
 

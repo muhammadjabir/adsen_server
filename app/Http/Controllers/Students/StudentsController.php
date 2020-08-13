@@ -19,7 +19,7 @@ class StudentsController extends Controller
     {
         if ($request->keyword !=='') {
             $students = \App\Models\Student::with(['kelas'=> function($q) {
-                $q->select('name');
+                $q->withTrashed()->select('name');
             }])
                     ->where('name','LIKE',"%{$request->keyword}%")
                     ->orWhereHas('kelas',function($q) use ($request){

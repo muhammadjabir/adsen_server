@@ -15,7 +15,8 @@ export default {
     computed: {
         ...mapGetters({
             token:'auth/token',
-            urlDefault: 'BeforeUrl/urlDefault'
+            urlDefault: 'BeforeUrl/urlDefault',
+            user:'auth/user'
         })
     },
 

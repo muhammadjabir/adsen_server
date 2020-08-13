@@ -11,6 +11,7 @@ export default {
             loading:true,
             keyword:'',
             urlcreate: '',
+            status:'',
             url: '',
             dialog:false,
             idDelete: null
@@ -31,15 +32,15 @@ export default {
         async go(){
             let url = this.url
             if(this.page > 1) {
-                url = url + '?page=' +this.page + "&keyword=" + this.keyword
+                url = url + '?page=' +this.page + "&keyword=" + this.keyword + "&status=" + this.status
             }else{
-                url = url + "?keyword=" + this.keyword
+                url = url + "?keyword=" + this.keyword + "&status="  + this.status
             }
             await this.axios.get(url,this.config)
             .then((ress)=>{
                 this.data = ress.data.data
-                this.page = ress.data.current_page
-                this.lengthpage = ress.data.last_page
+                this.page = ress.data.current_page ? ress.data.current_page : ress.data.meta.current_page 
+                this.lengthpage = ress.data.last_page ? ress.data.last_page : ress.data.meta.last_page
             })
             .catch((err)=>{
                 console.log(err.response)
