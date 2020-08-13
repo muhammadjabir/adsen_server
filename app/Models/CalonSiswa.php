@@ -11,4 +11,8 @@ class CalonSiswa extends Model
     public function kelas_pilihan(){
         return $this->belongsTo('\App\Models\Kelas','kelas');
     }
+
+    public function info(){
+        return $this->belongsTo('\App\Models\MasterDataDetail','id_darimana');
+    }
 }

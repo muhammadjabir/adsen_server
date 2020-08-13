@@ -24,7 +24,11 @@ class CalonSiswa extends JsonResource
             'status' => $this->status == 'Mahasiswa' ? 'Mahasiswa/Pelajar' :$this->status,
             'kelas' => $this->kelas_pilihan->name,
             'catatan' => $this->catatan,
-            'status_pendaftaran' => $this->status_pendaftaran
+            'status_pendaftaran' => $this->status_pendaftaran,
+            'info' => $this->info->description,
+            'alamat' => $this->alamat,
+            'kelamin' => $this->kelamin,
+            'tgl_lahir' => $this->tgl_lahir,
         ];
     }
 }

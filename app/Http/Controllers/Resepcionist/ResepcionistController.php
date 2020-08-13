@@ -21,20 +21,21 @@ class ResepcionistController extends Controller
         if ($request) {
             $data = CalonSiswa::with(['kelas_pilihan'=> function($q) {
                 $q->withTrashed();
-            }])
+            },'info'])
             ->where(function($q) use ($request) {
                 $q->where('nama','LIKE',"%{$request->keyword}%")
                 ->orWhere('email','LIKE',"%{$request->keyword}%")
                 ->orWhereHas('kelas_pilihan',function($q) use ($request){
                 $q->where('name','LIKE',"%{$request->keyword}%");
-                })
-                ->orWhere('status','LIKE',"%{$request->keyword}%");
+                });
+                // ->orWhere('status','LIKE',"%{$request->keyword}%");
             })
             ->where(function($q) use ($request) {
                 if ($request->status) {
                    $q->where('status_pendaftaran',$request->status);
                 }
             })
+            ->orderBy('created_at','desc')
             ->paginate(15);
         }
         return new CalonSiswaCollection($data) ;
@@ -62,7 +63,7 @@ class ResepcionistController extends Controller
                         if($user->save()){
                             $siswa = new Student;
                             $siswa->name = $data->nama; 
-                            $siswa->kelamin = 'Pria'; 
+                            $siswa->kelamin = $data->kelamin; 
                             $siswa->id_user = $user->id;
                             $siswa->created_by = \Auth::user()->id;
                             if($siswa->save()){

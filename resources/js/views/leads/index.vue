@@ -144,6 +144,15 @@
                                     <td>Nama</td>
                                     <td>{{data_leads.nama}}</td>
                                 </tr>
+
+                                <tr>
+                                    <td>Tanggal Lahir</td>
+                                    <td>{{data_leads.tgl_lahir}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Kelamin</td>
+                                    <td>{{data_leads.kelamin}}</td>
+                                </tr>
                                 <tr>
                                    <td>Email</td>
                                     <td> {{data_leads.email}}</td>
@@ -159,8 +168,16 @@
                                 </tr>
                                     
                                 <tr>
-                                    <td>Catatan</td>
+                                    <td>Pertanyaan</td>
                                     <td> {{data_leads.catatan}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Alamat</td>
+                                    <td> {{data_leads.alamat}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Dapat Info Dari</td>
+                                    <td> {{data_leads.info}}</td>
                                 </tr>
 
                                 <tr>
