@@ -12,6 +12,7 @@ export default {
             keyword:'',
             urlcreate: '',
             status:'',
+            
             url: '',
             dialog:false,
             idDelete: null
