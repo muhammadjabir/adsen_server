@@ -15,4 +15,8 @@ class CalonSiswa extends Model
     public function info(){
         return $this->belongsTo('\App\Models\MasterDataDetail','id_darimana');
     }
+
+    public function followup(){
+        return $this->hasMany('\App\Models\Followup','id_calon_siswa');
+    }
 }

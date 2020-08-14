@@ -76,10 +76,10 @@
                                     </v-btn>
                                     <!-- <v-btn color="success" v-on:click="edit(item.id)" small dark >
                                         <v-icon>mdi-circle-edit-outline</v-icon>
-                                    </v-btn>
-                                    <v-btn color="error" small @click="dialogDelete(item.id)" >
-                                        <v-icon>mdi-delete-outline</v-icon>
                                     </v-btn> -->
+                                    <v-btn color="error" small @click="dialogDelete(item.id)" v-if="user.id_role == 23">
+                                        <v-icon>mdi-delete-outline</v-icon>
+                                    </v-btn>
                                 </td>
                             </tr>
                         </tbody>
@@ -192,6 +192,30 @@
                                     ></v-select>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td :rowspan="data_leads.followup  !== undefined  ? data_leads.followup.length : 1">Follow Up</td>
+                                    <td v-if="data_leads.followup === undefined || data_leads.followup.length == 0" class="text-followup">
+                                        <!-- <input type="text" style="width:100%"> -->
+                                        <textarea name="" id="" style="width:100%" v-model="deskripsi"></textarea>
+                                        <div class="tombol-save">
+                                        <v-btn x-small color="success" @click="followup(data_leads.id)">&#10004;</v-btn>
+                                        </div>
+                                    </td>
+                                     <td  class="text-followup" v-for="(item,index) in data_leads.followup" :key="index" v-if="data_leads.followup !== undefined">
+                                        <!-- <input type="text"> -->
+                                        {{item.deskripsi}}
+                                        <div class="tombol-save">
+                                        <v-btn x-small color="success" v-if="deskripsi" @click="followup(data_leads.id)">&#10004;</v-btn>
+                                        <v-btn x-small color="success" v-if="index == data_leads.followup.length - 1">Follow Up +</v-btn>
+                                        </div>
+                                    </td>
+                                    
+                                </tr>
+
+                             
+
+                                   
+                            
                                     
                                 
                             </tbody>
@@ -238,7 +262,8 @@ export default {
             choice_status:'All Status',
             dialog_leads: false,
             change_status:'',
-            data_leads:[]
+            data_leads:[],
+            deskripsi: ''
         }
     },
     mixins:[CrudMixin],
@@ -267,6 +292,18 @@ export default {
             }
 
             this.go()
+        },
+        async followup(id_calon){
+            let data = new FormData()
+            data.append('id_calon',id_calon)
+            data.append('deskipsi',this.deskripsi)
+            this.axios.post('/followup',data,this.config)
+            .then((ress)=> {
+                console.log(ress)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         },
         showLead(id){
             this.data_leads = this.data.find( item => {
@@ -343,6 +380,14 @@ export default {
     }
     .table-lead td {
         padding: 10px 5px 10px 5px;
+    }
+    .text-followup{
+        position: relative;
+    }
+    .tombol-save{
+        position: absolute;
+        top: 0px;
+        right: 0px;
     }
 </style>
 

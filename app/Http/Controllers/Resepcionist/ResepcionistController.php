@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Resepcionist;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CalonSiswa\CalonSiswaCollection;
 use App\Models\CalonSiswa;
+use App\Models\Followup;
 use App\Models\Kelas;
 use App\Models\Student;
 use App\User;
@@ -21,7 +22,7 @@ class ResepcionistController extends Controller
         if ($request) {
             $data = CalonSiswa::with(['kelas_pilihan'=> function($q) {
                 $q->withTrashed();
-            },'info'])
+            },'info','followup'])
             ->where(function($q) use ($request) {
                 $q->where('nama','LIKE',"%{$request->keyword}%")
                 ->orWhere('email','LIKE',"%{$request->keyword}%")
@@ -99,4 +100,22 @@ class ResepcionistController extends Controller
         ],$status);
 
     }
+
+    public function followup(Request $request){
+        $data = new Followup;
+        $data->id_calon_siswa = $request->id_calon;
+        $data->deskripsi = $request->deskipsi;
+        $data->save();
+    }
+
+    public function destroy($id)
+    {
+        $student = \App\Models\CalonSiswa::findOrFail($id);
+        if($student->delete()){
+            return response()->json([
+                'message' => 'Success Delete Leads'
+            ]);
+        }
+    }
+
 }

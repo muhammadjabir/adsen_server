@@ -28,6 +28,7 @@ Route::post('/register-calon','openApi\ClassApi@create');
 
 Route::middleware(['auth:api'])->group(function () {
 Route::get('/schedule','Schedule\ScheduleController@index');
+Route::post('/followup','Resepcionist\ResepcionistController@followup');
 Route::get('/schedule/{id}/absen','Schedule\ScheduleController@absen');
 Route::post('/schedule/{id}/absen','Schedule\ScheduleController@absen_student');
 

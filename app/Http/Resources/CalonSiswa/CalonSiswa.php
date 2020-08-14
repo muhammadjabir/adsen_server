@@ -25,10 +25,11 @@ class CalonSiswa extends JsonResource
             'kelas' => $this->kelas_pilihan->name,
             'catatan' => $this->catatan,
             'status_pendaftaran' => $this->status_pendaftaran,
-            'info' => $this->info->description,
+            'info' => $this->info ? $this->info->description : '',
             'alamat' => $this->alamat,
             'kelamin' => $this->kelamin,
             'tgl_lahir' => $this->tgl_lahir,
+            'followup' => $this->followup
         ];
     }
 }
