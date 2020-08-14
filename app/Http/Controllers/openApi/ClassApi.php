@@ -65,7 +65,7 @@ class ClassApi extends Controller
                 'message' => 'Info darimana Tidak Boleh Kosong'
             ],400);
         }
-        $cek_data = CalonSiswa::where('email',$request->email)->where('status',0)->first();
+        $cek_data = CalonSiswa::where('email',$request->email)->where('status_pendaftaran',0)->first();
         if ($cek_data) {
             return response()->json([
                 'message' => 'Silakan Menunggu dihubungi CS kami'
