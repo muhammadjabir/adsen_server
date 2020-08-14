@@ -164,7 +164,7 @@
                                     
                                 <tr>
                                     <td>Whatsapp</td>
-                                    <td> {{data_leads.nowa}}</td>
+                                    <td> <a :href="'https://api.whatsapp.com/send?phone=' + data_leads.nowa +'&text=&source=&data=&app_absent='" target="_blank" rel="noopener noreferrer"> {{data_leads.nowa}}</a></td>
                                 </tr>
                                     
                                 <tr>
@@ -192,8 +192,8 @@
                                     ></v-select>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td :rowspan="data_leads.followup  !== undefined  ? data_leads.followup.length : 1">Follow Up</td>
+                                <tr v-if="data_leads.followup === undefined || data_leads.followup.length == 0" >
+                                    <td >Follow Up</td>
                                     <td v-if="data_leads.followup === undefined || data_leads.followup.length == 0" class="text-followup">
                                         <!-- <input type="text" style="width:100%"> -->
                                         <textarea name="" id="" style="width:100%" v-model="deskripsi"></textarea>
@@ -201,22 +201,20 @@
                                         <v-btn x-small color="success" @click="followup(data_leads.id)">&#10004;</v-btn>
                                         </div>
                                     </td>
-                                     <td  class="text-followup" v-for="(item,index) in data_leads.followup" :key="index" v-if="data_leads.followup !== undefined">
-                                        <!-- <input type="text"> -->
-                                        {{item.deskripsi}}
-                                        <div class="tombol-save">
-                                        <v-btn x-small color="success" v-if="deskripsi" @click="followup(data_leads.id)">&#10004;</v-btn>
-                                        <v-btn x-small color="success" v-if="index == data_leads.followup.length - 1">Follow Up +</v-btn>
-                                        </div>
-                                    </td>
-                                    
                                 </tr>
 
-                             
-
-                                   
-                            
-                                    
+                                <tr v-for="(item,index) in data_leads.followup" :key="index" v-else>
+                                    <td >Follow Up {{index + 1}}</td>
+                                    <td  class="text-followup"  >
+                                        <!-- <input type="text"> -->
+                                        {{ item.id !== undefined ? item.deskripsi : ''}}
+                                        <textarea name="" id="" style="width:100%" v-model="deskripsi" v-if="item.id == undefined"></textarea>
+                                        <div class="tombol-save">
+                                        <v-btn x-small color="success" v-if="deskripsi && item.id == undefined" @click="followup(data_leads.id)" :loading="loading_followup">&#10004;</v-btn>
+                                        <v-btn x-small color="success" v-if="index == data_leads.followup.length - 1 && item.id != undefined" @click="tambahFollow()">Follow Up +</v-btn>
+                                        </div>
+                                    </td>
+                                </tr>
                                 
                             </tbody>
                         </table>
@@ -263,7 +261,8 @@ export default {
             dialog_leads: false,
             change_status:'',
             data_leads:[],
-            deskripsi: ''
+            deskripsi: '',
+            loading_followup : false
         }
     },
     mixins:[CrudMixin],
@@ -295,15 +294,27 @@ export default {
         },
         async followup(id_calon){
             let data = new FormData()
+             this.loading_followup = true
             data.append('id_calon',id_calon)
             data.append('deskipsi',this.deskripsi)
-            this.axios.post('/followup',data,this.config)
+            await this.axios.post('/followup',data,this.config)
             .then((ress)=> {
-                console.log(ress)
+               
+                this.data_leads = ress.data.data
+                this.deskripsi = ''
             })
             .catch((err) => {
                 console.log(err)
             })
+            this.loading_followup = false
+        },
+
+        tambahFollow(){
+            let data = {
+                deskripsi:''
+            }
+            console.log(this.data_leads.followup)
+            this.data_leads.followup.push(data)
         },
         showLead(id){
             this.data_leads = this.data.find( item => {

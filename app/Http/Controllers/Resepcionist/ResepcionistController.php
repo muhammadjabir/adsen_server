@@ -106,6 +106,10 @@ class ResepcionistController extends Controller
         $data->id_calon_siswa = $request->id_calon;
         $data->deskripsi = $request->deskipsi;
         $data->save();
+        return response()->json([
+            'message' => 'Success Simpan Follow Up',
+            'data' => CalonSiswa::with('followup')->findOrFail($request->id_calon)
+        ]);
     }
 
     public function destroy($id)
