@@ -39,6 +39,7 @@ Route::post('/courses/status','Courses\CoursesController@ChangeStatus');
 Route::post('/class-management/status','Kelas\KelasController@ChangeStatus');
 Route::get('/students/class', 'Students\StudentsController@kelas');
 Route::get('/ganti-status', 'Resepcionist\ResepcionistController@changeStatus');
+Route::post('/send-invoice/{id}/mail', 'Resepcionist\ResepcionistController@sendInvoice');
 Route::resource('masterdata', 'Masterdata\MasterdataController');
 Route::resource('menu', 'Menu\MenuController');
 Route::resource('users', 'Users\UsersController');

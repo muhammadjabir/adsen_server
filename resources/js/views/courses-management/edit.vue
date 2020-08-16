@@ -51,6 +51,20 @@
                                     required
                                 ></v-select>
 
+                                 <v-text-field
+                                v-model="harga"
+                                :rules="nameRules"
+                                label="Harga Course"
+                                required
+                                ></v-text-field>
+
+                                <v-text-field
+                                v-model="diskon"
+                                :rules="nameRules"
+                                label="Diskon"
+                                required
+                                ></v-text-field>
+
 
                                 <v-row>
                                     <v-col
@@ -106,6 +120,8 @@ export default {
             data.append('name',this.name)
             data.append('foto' , this.foto)
             data.append('id_category' , this.select)
+            data.append('harga' , this.harga)
+            data.append('diskon' , this.diskon)
             data.append('_method','PUT')
 
             await this.axios.post(url,data,this.config)
@@ -159,6 +175,8 @@ export default {
              this.imgurl = courses.foto_courses ? courses.foto_courses : this.imgurl
 
              this.items = ress.data.category
+             this.harga = courses.harga
+             this.diskon = courses.diskon
          })
          .catch((err) => console.log(err.response))
         }

@@ -40,6 +40,8 @@
                             <th class="text-left">Name Courses</th>
                             <th class="text-left">Category</th>
                             <th class="text-left">Status</th>
+                            <th class="text-left">Harga</th>
+                            <th class="text-left">Diskon</th>
                             <th class="text-left">Action</th>
                             </tr>
                         </thead>
@@ -52,6 +54,8 @@
                                 </td>
                                 <td class="text-left">{{item.name}}</td>
                                 <td class="text-left">{{item.category.description}}</td>
+                                <td class="text-left">{{item.harga | formatPrice}}</td>
+                                <td class="text-left">{{item.diskon}}%</td>
                                 <td class="text-left">
                                     <v-btn color=""x-small dark v-if="item.status == 0" @click="ChangeStatus(item.id)" :loading="item.loading ? item.loading : false" >
                                         Non-Active
@@ -61,7 +65,7 @@
                                         Active
                                     </v-btn>
                                 </td>
-                                <td class="text-left" width="30%">
+                                <td class="text-left">
                                 <v-btn color="success" v-on:click="edit(item.id)" fab x-small dark >
                                     <v-icon>mdi-circle-edit-outline</v-icon>
                                 </v-btn>
@@ -150,6 +154,12 @@ export default {
             })
 
             this.data[index].loading = false
+        }
+    },
+    filters:{
+        formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         }
     }
 }

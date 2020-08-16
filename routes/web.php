@@ -10,11 +10,17 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use App\Mail\SendInvoiceTemplate;
+
 Route::get('/test',function(){
     $user = \App\User::findOrFail(1);
     $user->password = \Hash::make(123456);
     $user->save();
 
+});
+Route::get('/test/email',function(){
+    return view('test');
 });
 Route::get('/',function(){
     return redirect('/jadwal');

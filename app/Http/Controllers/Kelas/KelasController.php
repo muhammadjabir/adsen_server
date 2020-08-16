@@ -77,7 +77,7 @@ class KelasController extends Controller
         // DB::beginTransaction();
         $error = 0;
         // try {
-
+            $course = Courses::findOrFail($request->id_courses);
             $class = new \App\Models\Kelas;
             $class->name = $request->name;
             $class->slug = Str::slug($request->name,'-');
@@ -86,6 +86,8 @@ class KelasController extends Controller
             $class->jam_masuk = $request->mulai;
             $class->jam_pulang = $request->sampai;
             $class->max_students = $request->max_student;
+            // $class->harga = $course->harga;
+            // $class->diskon = $course->diskon;
             if($class->save()){
                 // DB::commit();
                 if(!$class->kelasHasDay()->attach(json_decode($request->days))){

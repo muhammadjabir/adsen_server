@@ -85,6 +85,8 @@ class CoursesController extends Controller
         $courses = new Courses;
         $courses->name = $request->name;
         $courses->slug = Str::slug($request->name,'-');
+        $courses->harga = $request->harga;
+        $courses->diskon = $request->diskon;
         $courses->id_category = $request->id_category;
         if ($request->file('foto')) {
             $foto =  $request->file('foto')->store('foto_courses','public');
@@ -152,6 +154,8 @@ class CoursesController extends Controller
         $courses->name = $request->name;
         $courses->slug = Str::slug($request->name,'-');
         $courses->id_category = $request->id_category;
+        $courses->harga = $request->harga;
+        $courses->diskon = $request->diskon;
         if ($request->file('foto')) {
             if($courses->foto and file_exists(storage_path('app/public/'.$courses->foto))){
                 $cek = explode('\\',$courses->foto);

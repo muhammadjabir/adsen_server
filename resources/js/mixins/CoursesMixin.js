@@ -8,6 +8,8 @@ export default {
         select:'',
         items:[],
         name: '',
+        harga: 0,
+        diskon: 0,
         nameRules: [
           v => !!v || 'Tidak Boleh Kosong',
         ],

@@ -67,12 +67,15 @@
                                     <v-btn x-small color="secondary" dark v-if="item.status_pendaftaran == 0 ">Cold Leads</v-btn>
                                     <v-btn x-small color="success" dark v-if="item.status_pendaftaran == 1 ">Leads</v-btn>
                                     <v-btn x-small color="primary" dark v-if="item.status_pendaftaran == 2 ">Hot Leads</v-btn>
-                                    <v-btn x-small color="danger" dark v-if="item.status_pendaftaran == 3 ">Canceled</v-btn>
+                                    <v-btn x-small color="red" dark v-if="item.status_pendaftaran == 3 ">Canceled</v-btn>
                                 </td>
                                
                                 <td class="text-left">
                                     <v-btn color="primary" v-on:click="showLead(item.id)" small dark v-if="item.status_pendaftaran != 1 || user.id_role == 23">
                                         <v-icon>mdi-circle-edit-outline</v-icon>
+                                    </v-btn>
+                                    <v-btn color="success" :loading="item.loading" v-on:click="sendInvoice(item.id)" small dark v-if="item.status_pendaftaran != 1 || user.id_role == 23">
+                                        Send Invoice
                                     </v-btn>
                                     <!-- <v-btn color="success" v-on:click="edit(item.id)" small dark >
                                         <v-icon>mdi-circle-edit-outline</v-icon>
@@ -376,6 +379,30 @@ export default {
             .catch((err)=>{
                 console.log(err)
             })
+        },
+
+        async sendInvoice(id){
+            let lead = this.data.find(x => x.id === id)
+            let index = this.data.findIndex(x => x.id === id)
+            lead.loading = true
+            this.data.splice(index,1,lead)
+            await this.axios.post(`/send-invoice/${id}/mail`,{},this.config)
+            .then((ress)=>{
+                this.setSnakbar({
+                    color:'success',
+                    pesan:'Berhasil Kirim Invoice',
+                    status:true
+                })
+            })
+            .catch((err)=>{
+               this.setSnakbar({
+                    color:'red',
+                    pesan:'Terjadi Kesalahan Hubungi Developer',
+                    status:true
+                })
+            })
+            lead.loading = false
+            this.data.splice(index,1,lead)
         }
     }
 }
