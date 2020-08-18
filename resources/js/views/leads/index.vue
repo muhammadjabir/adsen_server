@@ -167,7 +167,7 @@
                                     
                                 <tr>
                                     <td>Whatsapp</td>
-                                    <td> <a :href="'https://api.whatsapp.com/send?phone=' + data_leads.nowa +'&text=&source=&data=&app_absent='" target="_blank" rel="noopener noreferrer"> {{data_leads.nowa}}</a></td>
+                                    <td> <a :href="'https://api.whatsapp.com/send?phone=' + data_leads.nowareplace +'&text=&source=&data=&app_absent='" target="_blank" rel="noopener noreferrer"> {{data_leads.nowa}}</a></td>
                                 </tr>
                                     
                                 <tr>
@@ -323,6 +323,7 @@ export default {
             this.data_leads = this.data.find( item => {
                 return item.id === id
             })
+            
             switch (this.data_leads.status_pendaftaran) {
                 case 0:
                     this.change_status = 'Cold Leads'
@@ -344,6 +345,8 @@ export default {
                     
                     break;
             }
+            console.log(this.data_leads.nowa.replace('0','62'))
+            this.data_leads.nowareplace = this.data_leads.nowa.replace('0','62')
             console.log(this.data_leads)
             this.dialog_leads = true
 
@@ -404,7 +407,11 @@ export default {
             lead.loading = false
             this.data.splice(index,1,lead)
         }
-    }
+    
+        
+    },
+    
+
 }
 </script>
 <style scoped>

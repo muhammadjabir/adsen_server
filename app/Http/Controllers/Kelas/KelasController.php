@@ -246,7 +246,12 @@ class KelasController extends Controller
 
     public function ChangeStatus(Request $request){
         $class = Kelas::findOrFail($request->id);
+        if ($request->status == 'pendaftaran') {
+        $class->status_pendaftaran = !$class->status_pendaftaran;
+
+        } else {
         $class->status = !$class->status;
+        }
         $class->save();
         return response()->json([
             'message' => 'Berhasil Change Status '

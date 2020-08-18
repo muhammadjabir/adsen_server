@@ -1,7 +1,7 @@
 <template>
 <v-container class="text-center">
     <div class="images">
-     <img src="https://redhunter.id/wp-content/uploads/2020/01/redhunter-logo-1.png" width="300px">
+     <img src="https://redhunter.id/wp-content/uploads/2020/01/logo-redhunter-background-putih.png" width="300px">
     </div>
     <v-simple-table>
     <template v-slot:default>
@@ -90,15 +90,14 @@ export default {
         }
     },
     created(){
-
-        var pusher = new Pusher('2808afa6e874e66aa7f3', {
+        
+        var pusher = new Pusher('2d64dc4842b9aefc8d89', {
         cluster: 'ap1',
         forceTLS: true
         });
         let fngsi =() => {
             this.go()
         }
-
         fngsi()
         var channel = pusher.subscribe('push');
         channel.bind("my-push", function(data) {

@@ -195,7 +195,7 @@
                     <tr>
                         <td>1.</td>
                         <td>{{$data->kelas_pilihan->name}}</td>
-                        <td>{{$data->harga * ($data->diskon/100)}}</td>
+                        <td>{{ $data->harga - ($data->harga * ($data->diskon/100))}}</td>
                     </tr>
                 </tbody>
             </table>

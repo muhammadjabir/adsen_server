@@ -41,6 +41,7 @@
                             <th class="text-left">Trainer</th>
                             <th class="text-left">Total Students</th>
                             <th class="text-left">Status</th>
+                            <th class="text-left">Pendaftaran</th>
                             <th class="text-left">Aksi</th>
                             </tr>
                         </thead>
@@ -76,12 +77,22 @@
                                 </td>
                                 <td class="text-center">{{item.total_students}}</td>
                                 <td class="text-left">
-                                    <v-btn color=""x-small dark v-if="item.status == 0" @click="ChangeStatus(item.id)" :loading="item.loading ? item.loading : false" >
+                                    <v-btn color=""x-small dark v-if="item.status == 0" @click="ChangeStatus(item.id,'status')" :loading="item.loading ? item.loading : false" >
                                         Non-Active
                                     </v-btn>
 
-                                     <v-btn color="success"x-small dark v-if="item.status == 1" @click="ChangeStatus(item.id)" :loading="item.loading ? item.loading : false" >
+                                     <v-btn color="success"x-small dark v-if="item.status == 1" @click="ChangeStatus(item.id,'status')" :loading="item.loading ? item.loading : false" >
                                         Active
+                                    </v-btn>
+                                </td>
+
+                                 <td class="text-left">
+                                    <v-btn color="red" x-small dark v-if="item.status_pendaftaran == 0" @click="ChangeStatus(item.id,'pendaftaran')" :loading="item.loading_pendaftaran ? item.loading_pendaftaran : false" >
+                                        Closed
+                                    </v-btn>
+
+                                     <v-btn color="success"x-small dark v-if="item.status_pendaftaran == 1" @click="ChangeStatus(item.id,'pendaftaran')" :loading="item.loading_pendaftaran ? item.loading_pendaftaran : false" >
+                                        Open
                                     </v-btn>
                                 </td>
                                 <td class="text-left">
@@ -154,18 +165,30 @@ export default {
     name: 'classmanagement',
     mixins:[CrudMixin],
     methods:{
-        async ChangeStatus(id){
+        async ChangeStatus(id,status){
             let courses = this.data.find(x => x.id === id)
             let index = this.data.findIndex(x => x.id === id)
-            courses.loading = true
+            
             this.data.splice(index,1,courses)
             let data = new FormData()
             data.append('id',id)
+            data.append('status',status)
+            if (status == 'pendaftaran') {
+                courses.loading_pendaftaran = true
+            } else {
+                courses.loading = true
+            }
             let url = window.location.pathname + '/status'
             await this.axios.post(url,data,this.config)
             .then((ress) => {
-                courses.status = !courses.status
-                courses.loading = false
+                 if (status == 'pendaftaran') {
+                courses.status_pendaftaran = !courses.status_pendaftaran
+                    courses.loading_pendaftaran = false
+                } else {
+                   courses.status = !courses.status
+                    courses.loading = false
+                }
+                
                 this.data.splice(index,1,courses)
 
             })
@@ -176,7 +199,9 @@ export default {
             })
 
             this.data[index].loading = false
-        }
+        },
+
+       
     }
 }
 </script>

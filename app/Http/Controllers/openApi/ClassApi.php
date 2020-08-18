@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class ClassApi extends Controller
 {
     public function index(){
-        $data = Kelas::where('status',1)->get();
+        $data = Kelas::where('status_pendaftaran',1)->get();
         $data_info = MasterDataDetail::select('description')->where('id_master_data',10)->get();
         return ['data'=>new KelasCollection($data),'data_info'=>$data_info];
     }
