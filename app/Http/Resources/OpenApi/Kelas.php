@@ -16,9 +16,9 @@ class Kelas extends JsonResource
     {
         return [  'name' => $this->name,
         'slug' => $this->slug,
-        'harga' => number_format($this->harga,0),
-        'diskon' => $this->diskon,
-        'total_harga' => $this->harga - ($this->harga * ($this->diskon/100))
+        'harga' => number_format($this->courses->harga,0),
+        'diskon' => $this->courses->diskon,
+        'total_harga' => $this->courses->harga - ($this->courses->harga * ($this->courses->diskon/100))
         ];
     }
 }
