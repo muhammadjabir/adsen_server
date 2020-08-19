@@ -14,6 +14,12 @@ export default {
                 component : () => import('../views/user-management/create.vue')
             },
             {
+                path:'trash',
+                name:'user.trash',
+                component:()=>import('../views/trash/user.vue')
+            },
+            
+            {
                 path:':id/edit',
                 name:'users.edit',
                 component: () => import('../views/user-management/edit.vue')

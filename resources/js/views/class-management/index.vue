@@ -42,6 +42,8 @@
                             <th class="text-left">Total Students</th>
                             <th class="text-left">Status</th>
                             <th class="text-left">Pendaftaran</th>
+                            <th class="text-left">Awal Pendaftaran</th>
+                            <th class="text-left">Akhir Pendaftaran</th>
                             <th class="text-left">Aksi</th>
                             </tr>
                         </thead>
@@ -94,6 +96,16 @@
                                      <v-btn color="success"x-small dark v-if="item.status_pendaftaran == 1" @click="ChangeStatus(item.id,'pendaftaran')" :loading="item.loading_pendaftaran ? item.loading_pendaftaran : false" >
                                         Open
                                     </v-btn>
+                                </td>
+                                <td class="text-left" >
+
+                                {{item.awal_pendaftaran | setDate}}
+
+                                </td>
+                                <td class="text-left" >
+
+                                {{item.akhir_pendaftaran | setDate}}
+
                                 </td>
                                 <td class="text-left">
                                 <v-btn color="success" v-on:click="edit(item.id)" fab x-small dark >
@@ -201,6 +213,22 @@ export default {
             this.data[index].loading = false
         },
 
+       
+    },
+    filters:{
+        setDate(value){
+        let data = value
+        data = new Date(data)
+        let bulan = data.getMonth()
+        let tgl = data.getDate()
+        tgl = tgl.toString().length < 2 ? `0${tgl}` : `${tgl}` 
+        bulan = bulan.toString().length < 2 ? `0${bulan + 1}` : `${bulan + 1}` 
+        data = `${tgl}-${bulan}-${data.getFullYear()}`
+        return data
+        }
+    },
+
+    created(){
        
     }
 }

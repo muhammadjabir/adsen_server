@@ -15,6 +15,11 @@ export default  {
             component:()=>import('../views/courses-management/create.vue')
         },
         {
+            path:'trash',
+            name:'courses.trash',
+            component:()=>import('../views/trash/courses.vue')
+        },
+        {
             path:':id/edit',
             name:'courses.edit',
             component:()=>import('../views/courses-management/edit.vue')

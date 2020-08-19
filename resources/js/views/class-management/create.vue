@@ -176,6 +176,52 @@
                                 </v-menu>
                                 </v-col>
 
+                                <v-col cols="12"  md="6">
+                                <v-menu
+                                    v-model="awal_pendaftaran"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date_pendaftaran_awal"
+                                        label="Awal Pendaftaran"
+                                       
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="date_pendaftaran_awal" @input="awal_pendaftaran = false"></v-date-picker>
+                                </v-menu>
+                                </v-col>
+
+                                <v-col cols="12"  md="6">
+                                <v-menu
+                                    v-model="akhir_pendaftaran"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date_pendaftaran_akhir"
+                                        label="Akhir Pendaftaran"
+                                        
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="date_pendaftaran_akhir" @input="akhir_pendaftaran = false"></v-date-picker>
+                                </v-menu>
+                                </v-col>
+
 
                             </v-row>
 
@@ -222,7 +268,8 @@ export default {
     name: 'Class.create',
     data: () => ({
         imgurl: 'storage/default/icon_admin.jpg',
-        foto:''
+        foto:'',
+      
 
    }),
 
@@ -241,6 +288,8 @@ export default {
             data.append('mulai' , this.time)
             data.append('sampai' , this.sampai)
             data.append('max_student' , this.max_student)
+            data.append('awal_pendaftaran' , this.date_pendaftaran_awal)
+            data.append('akhir_pendaftaran' , this.date_pendaftaran_akhir)
             await this.axios.post(url,data,this.config)
             .then((ress) => {
 

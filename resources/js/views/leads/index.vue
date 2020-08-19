@@ -174,6 +174,7 @@
                                     <td>Pertanyaan</td>
                                     <td> {{data_leads.catatan}}</td>
                                 </tr>
+                                
                                 <tr>
                                     <td>Alamat</td>
                                     <td> {{data_leads.alamat}}</td>
@@ -195,6 +196,19 @@
                                     ></v-select>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>Kelas</td>
+                                    <td > <v-select
+                                    v-model="kelas_pilihan"
+                                    :items="kelas"
+                                    label="Class"
+                                    item-text="name"
+                                    item-value="id"
+                                    @change="gantiStatus(data_leads.id)"
+                                    ></v-select>
+                                    </td>
+                                </tr>
+                                
                                 <tr v-if="data_leads.followup === undefined || data_leads.followup.length == 0" >
                                     <td >Follow Up</td>
                                     <td v-if="data_leads.followup === undefined || data_leads.followup.length == 0" class="text-followup">
@@ -265,7 +279,9 @@ export default {
             change_status:'',
             data_leads:[],
             deskripsi: '',
-            loading_followup : false
+            loading_followup : false,
+            kelas:[],
+            kelas_pilihan:''
         }
     },
     mixins:[CrudMixin],
@@ -347,6 +363,7 @@ export default {
             }
             console.log(this.data_leads.nowa.replace('0','62'))
             this.data_leads.nowareplace = this.data_leads.nowa.replace('0','62')
+            this.kelas_pilihan = this.data_leads.id_kelas
             console.log(this.data_leads)
             this.dialog_leads = true
 
@@ -375,7 +392,7 @@ export default {
                     break;
             }
             console.log(data_status)
-            await this.axios.get('/ganti-status?id=' + id + '&status=' + data_status,this.config)
+            await this.axios.get('/ganti-status?id=' + id + '&status=' + data_status + '&kelas='+this.kelas_pilihan,this.config)
             .then((ress)=>{
                 this.go()
             })
@@ -406,10 +423,22 @@ export default {
             })
             lead.loading = false
             this.data.splice(index,1,lead)
-        }
+        },
+        getKelas(){
+            this.axios.get('get-kelas',this.config)
+            .then((ress) => {
+                this.kelas = ress.data.kelas
+                console.log(this.kelas)
+
+            })
+            .catch((err) => console.log(err))
+        },
     
         
     },
+    created(){
+        this.getKelas()
+    }
     
 
 }

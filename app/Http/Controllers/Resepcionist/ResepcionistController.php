@@ -66,6 +66,7 @@ class ResepcionistController extends Controller
         try {
             $data = CalonSiswa::findOrFail($request->id);
             $data->status_pendaftaran = $request->status;
+            $data->kelas = $request->kelas;
             if ($data->save()) {
                 if ($data->status_pendaftaran == 1 ) {
                     $cek_user = User::where('email',$data->email)->first();
@@ -138,6 +139,13 @@ class ResepcionistController extends Controller
                 'message' => 'Success Delete Leads'
             ]);
         }
+    }
+
+    public function getKelas(){
+        $kelas = \App\Models\Kelas::where('status_pendaftaran',1)->get();
+        return response()->json([
+            'kelas' => $kelas
+        ]);
     }
 
 }

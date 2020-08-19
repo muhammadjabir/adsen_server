@@ -12,7 +12,7 @@ export default {
             keyword:'',
             urlcreate: '',
             status:'',
-            
+
             url: '',
             dialog:false,
             idDelete: null
@@ -87,6 +87,36 @@ export default {
         dialogDelete(id){
             this.idDelete = id
             this.dialog = true
+        },
+        deletePermanent(id){
+            let url = window.location.pathname
+            url = url.split('/')
+            url = url[1] + '/' + id + '/' + url[2]
+          
+            this.axios.delete(url,this.config)
+            .then((ress) => {
+                console.log(ress)
+                this.setSnakbar({
+                    color:'success',
+                    pesan:ress.data.message,
+                    status:true
+                })
+                let index = this.data.map(x => {
+                    return x.id
+                }).indexOf(this.idDelete)
+
+                this.data.splice(index,1)
+                this.dialog = false
+            })
+            .catch((err)=>{
+                console.log(err.response)
+                this.setSnakbar({
+                    pesan:err.response.data.message,
+                    status:true,
+                    color:'red'
+                })
+            })
+            console.log(url)
         }
     },
 

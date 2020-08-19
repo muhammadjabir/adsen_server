@@ -14,6 +14,11 @@ export default  {
             component:()=> import('../views/students/create.vue')
         },
         {
+            path:'trash',
+            name:'student.trash',
+            component:()=>import('../views/trash/student.vue')
+        },
+        {
             path:':id/edit',
             name:'students.edit',
             component:()=>import('../views/students/edit.vue')

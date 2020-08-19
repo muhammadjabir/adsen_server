@@ -11,6 +11,7 @@ class Kelas extends Model
     protected $table ='class';
 
     protected $appends = ['hari_masuk'];
+    protected $dates=['awal_pendaftaran','akhir_pendaftaran'];
     public function  getHariMasukAttribute()
     {
         return $this->kelasHasDay()->pluck('description');

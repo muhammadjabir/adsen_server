@@ -22,6 +22,7 @@ class CalonSiswa extends JsonResource
             'nohp' => $this->nohp,
             'nowa' => $this->nowa,
             'status' => $this->status == 'Mahasiswa' ? 'Mahasiswa/Pelajar' :$this->status,
+            'id_kelas' => $this->kelas,
             'kelas' => $this->kelas_pilihan->name,
             'catatan' => $this->catatan,
             'status_pendaftaran' => $this->status_pendaftaran,

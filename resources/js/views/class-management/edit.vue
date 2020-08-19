@@ -176,6 +176,52 @@
                                 </v-menu>
                                 </v-col>
 
+                                 <v-col cols="12"  md="6">
+                                <v-menu
+                                    v-model="awal_pendaftaran"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date_pendaftaran_awal"
+                                        label="Awal Pendaftaran"
+                                       
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="date_pendaftaran_awal" @input="awal_pendaftaran = false"></v-date-picker>
+                                </v-menu>
+                                </v-col>
+
+                                <v-col cols="12"  md="6">
+                                <v-menu
+                                    v-model="akhir_pendaftaran"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date_pendaftaran_akhir"
+                                        label="Akhir Pendaftaran"
+                                        
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="date_pendaftaran_akhir" @input="akhir_pendaftaran = false"></v-date-picker>
+                                </v-menu>
+                                </v-col>
+
 
                             </v-row>
 
@@ -242,6 +288,8 @@ export default {
             data.append('mulai' , this.time)
             data.append('sampai' , this.sampai)
             data.append('max_student' , this.max_student)
+                 data.append('awal_pendaftaran' , this.date_pendaftaran_awal)
+            data.append('akhir_pendaftaran' , this.date_pendaftaran_akhir)
             await this.axios.post(url,data,this.config)
             .then((ress) => {
                 console.log(ress)
@@ -297,9 +345,23 @@ export default {
                 this.time =  ress.data.class.mulai,
                 this.sampai = ress.data.class.sampai
                 this.max_student = ress.data.class.max_student
+                // this.date_pendaftaran_awal = this.setDate(ress.data.class.awal_pendaftaran)
+                // this.date_pendaftaran_akhir = this.setDate(ress.data.class.akhir_pendaftaran)
+                 this.date_pendaftaran_awal = ress.data.class.awal_pendaftaran.format('YYYY-mm-dd')
+                this.date_pendaftaran_akhir = ress.data.class.akhir_pendaftaran.format('YYYY-mm-dd')
 
             })
             .catch((err) => console.log(err.response))
+        },
+        setDate(value){
+        let data = value
+        data = new Date(data)
+        // let bulan = data.getMonth()
+        // let tgl = data.getDate()
+        // tgl = tgl.toString().length < 2 ? `0${tgl}` : `${tgl}` 
+        // bulan = bulan.toString().length < 2 ? `0${bulan + 1}` : `${bulan + 1}` 
+        // data = `${data.getFullYear()}-${bulan}-${tgl}`
+        return data
         }
 
     },

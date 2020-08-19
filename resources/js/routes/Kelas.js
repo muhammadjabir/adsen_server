@@ -15,6 +15,11 @@ export default  {
             component:()=>import('../views/class-management/create.vue')
         },
         {
+            path:'trash',
+            name:'class.trash',
+            component:()=>import('../views/trash/class.vue')
+        },
+        {
             path:':id/edit',
             name:'/class-management.edit',
             component:()=>import('../views/class-management/edit.vue')

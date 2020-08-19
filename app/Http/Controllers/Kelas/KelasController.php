@@ -86,6 +86,8 @@ class KelasController extends Controller
             $class->jam_masuk = $request->mulai;
             $class->jam_pulang = $request->sampai;
             $class->max_students = $request->max_student;
+            $class->awal_pendaftaran = $request->awal_pendaftaran;
+            $class->akhir_pendaftaran = $request->akhir_pendaftaran;
             // $class->harga = $course->harga;
             // $class->diskon = $course->diskon;
             if($class->save()){
@@ -195,6 +197,8 @@ class KelasController extends Controller
             $class->jam_masuk = $request->mulai;
             $class->jam_pulang = $request->sampai;
             $class->max_students = $request->max_student;
+            $class->awal_pendaftaran = $request->awal_pendaftaran;
+            $class->akhir_pendaftaran = $request->akhir_pendaftaran;
             if($class->save()){
                 if(!$class->kelasHasDay()->sync(json_decode($request->days))){
                     $error++;

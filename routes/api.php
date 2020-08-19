@@ -27,8 +27,19 @@ Route::post('/register-calon','openApi\ClassApi@create');
 
 
 Route::middleware(['auth:api'])->group(function () {
+    Route::get('/students/trash', 'Trash\TrashController@student');
+    Route::get('/courses/trash', 'Trash\TrashController@courses');
+    Route::get('/users/trash', 'Trash\TrashController@user');
+    Route::get('/class-management/trash', 'Trash\TrashController@kelas');
+
+Route::delete('/students/{id}/trash', 'Trash\TrashController@student_delete');
+Route::delete('/courses/{id}/trash', 'Trash\TrashController@courses_delete');
+Route::delete('/users/{id}/trash', 'Trash\TrashController@user_delete');
+Route::delete('/class-management/{id}/trash', 'Trash\TrashController@kelas_delete');
+
 Route::get('/schedule','Schedule\ScheduleController@index');
 Route::post('/followup','Resepcionist\ResepcionistController@followup');
+Route::get('/get-kelas','Resepcionist\ResepcionistController@getKelas');
 Route::get('/schedule/{id}/absen','Schedule\ScheduleController@absen');
 Route::post('/schedule/{id}/absen','Schedule\ScheduleController@absen_student');
 

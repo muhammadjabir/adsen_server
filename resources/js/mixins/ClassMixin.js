@@ -21,7 +21,11 @@ export default {
         sampai: null,
         menu3: false,
         modal2: false,
-        max_student:''
+        max_student:'',
+        awal_pendaftaran : false,
+        akhir_pendaftaran : false,
+        date_pendaftaran_awal: new Date().toISOString().substr(0, 10),
+        date_pendaftaran_akhir: new Date().toISOString().substr(0, 10),
 
       }),
     methods: {
