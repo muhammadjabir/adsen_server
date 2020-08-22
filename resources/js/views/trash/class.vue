@@ -37,10 +37,7 @@
                         <thead>
                             <tr>
                             <th class="text-left">Class Name</th>
-                            <th class="text-left">Courses</th>
-                            <th class="text-left">Trainer</th>
-                            <th class="text-left">Total Students</th>
-                            
+                          
                             <th class="text-left">Aksi</th>
                             </tr>
                         </thead>
@@ -51,30 +48,8 @@
                                 {{item.name}}
 
                                 </td>
-                                <td class="text-left">
-                                    <v-list-item>
-                                    <v-list-item-avatar>
-                                        <v-img :src="item.courses.foto_courses? item.courses.foto_courses: this.urlDefault + 'storage/defaultprofile.jpg'"></v-img>
-                                    </v-list-item-avatar>
-
-                                    <v-list-item-content>
-                                        {{item.courses.name}}
-                                    </v-list-item-content>
-                                    </v-list-item>
-
-                                </td>
-                                <td class="text-left">
-                                    <v-list-item>
-                                    <v-list-item-avatar>
-                                        <v-img :src="item.trainer.foto_profile ? item.trainer.foto_profile : this.urlDefault + 'storage/defaultprofile.jpg'"></v-img>
-                                    </v-list-item-avatar>
-
-                                    <v-list-item-content>
-                                        {{item.trainer.name}}
-                                    </v-list-item-content>
-                                    </v-list-item>
-                                </td>
-                                <td class="text-center">{{item.total_students}}</td>
+                    
+                                
                               
                                 <td class="text-left">
                                <v-btn color="error" x-small @click="deletePermanent(item.id)" >

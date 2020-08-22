@@ -67,18 +67,16 @@ class TrashController extends Controller
     }
 
     public function kelas(Request $request) {
-        if ($request->keyword !=='') {
-            $kelas = \App\Models\Kelas::onlyTrashed()->with(['courses','kelasHasDay','trainer'])
-                    ->where('name','LIKE',"%{$request->keyword}%")
-                    ->orWhereHas('trainer',function($q) use ($request){
-                        $q->where('name','LIKE',"%{$request->keyword}%");
-                    })
-                    ->paginate(15);
-        }else{
-            $kelas = \App\Models\Kelas::onlyTrashed()->with(['courses','kelasHasDay','trainer'])
-            ->paginate(15);
+        // if ($request->keyword !=='') {
+        //     $kelas = \App\Models\Kelas::onlyTrashed()->with(['courses'])
+        //             ->where('name','LIKE',"%{$request->keyword}%")
+        //             ->paginate(15);
+        // }else{
+        //     $kelas = \App\Models\Kelas::onlyTrashed()->with(['courses'])
+        //     ->paginate(15);
 
-        }
+        // }
+        $kelas = DB::table('class')->where('deleted_at','!=',null)->paginate(15);
         return $kelas;
     }
 

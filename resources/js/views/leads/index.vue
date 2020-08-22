@@ -256,6 +256,7 @@
 <script>
 
 import CrudMixin from '../../mixins/CrudMixin'
+import Pusher from 'pusher-js';
 export default {
     name: 'leads',
     data() {
@@ -438,6 +439,19 @@ export default {
     },
     created(){
         this.getKelas()
+         var pusher = new Pusher('2d64dc4842b9aefc8d89', {
+        cluster: 'ap1',
+        forceTLS: true
+        });
+        let fngsi =() => {
+            this.go()
+        }
+        fngsi()
+        var channel = pusher.subscribe('push');
+        channel.bind("my-push", function(data) {
+        // app.messages.push(JSON.stringify(data));
+             fngsi()
+        });
     }
     
 

@@ -8,6 +8,7 @@ use App\Models\Kelas;
 use App\Models\CalonSiswa;
 use App\Models\MasterDataDetail;
 use Illuminate\Http\Request;
+use App\Events\push;
 
 class ClassApi extends Controller
 {
@@ -84,7 +85,9 @@ class ClassApi extends Controller
         $data->tgl_lahir = $request->tgl_lahir;
         $data->catatan = $request->catatan;
         $data->id_darimana = $cek_info->id;
-        $data->save();
+        if($data->save()){
+            event(new push($data));
+        };
 
         return response()->json([
             'message'=>'success'
