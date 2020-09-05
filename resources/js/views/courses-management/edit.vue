@@ -51,6 +51,16 @@
                                     required
                                 ></v-select>
 
+                                <v-select
+                                    v-model="category_course"
+                                    :items="category_courses"
+                                    :rules="[v => !!v || 'Item is required']"
+                                    label="Category Courses"
+                                    item-text="description"
+                                    item-value="id"
+                                    required
+                                ></v-select>
+
                                  <v-text-field
                                 v-model="harga"
                                 :rules="nameRules"
@@ -58,11 +68,21 @@
                                 required
                                 ></v-text-field>
 
-                                <v-text-field
+                               <v-text-field
                                 v-model="diskon"
-                                :rules="nameRules"
+                               
                                 label="Diskon"
-                                required
+                            
+                                ></v-text-field>
+
+                                <v-text-field
+                                v-model="link_tokped"
+                                label="Link Tokopedia"
+                                ></v-text-field>
+
+                                <v-text-field
+                                v-model="link_bukalapak"
+                                label="Link Bukalapak"
                                 ></v-text-field>
 
 
@@ -122,6 +142,9 @@ export default {
             data.append('id_category' , this.select)
             data.append('harga' , this.harga)
             data.append('diskon' , this.diskon)
+            data.append('link_tokped' , this.link_tokped)
+            data.append('link_bukalapak' , this.link_bukalapak)
+            data.append('id_category_courses' , this.category_course)
             data.append('_method','PUT')
 
             await this.axios.post(url,data,this.config)
@@ -172,11 +195,15 @@ export default {
              let courses = ress.data.courses
              this.name = courses.name
              this.select = courses.id_category
+             this.category_course = courses.id_category_courses
              this.imgurl = courses.foto_courses ? courses.foto_courses : this.imgurl
 
              this.items = ress.data.category
+             this.category_courses = ress.data.category_courses
              this.harga = courses.harga
              this.diskon = courses.diskon
+             this.link_bukalapak = courses.link_bukalapak
+             this.link_tokped = courses.link_tokped
          })
          .catch((err) => console.log(err.response))
         }

@@ -13,6 +13,10 @@ export default {
         nameRules: [
           v => !!v || 'Tidak Boleh Kosong',
         ],
+        category_courses:[],
+        category_course:'',
+        link_tokped:'',
+        link_bukalapak:''
       }),
     methods: {
         ...mapActions({
@@ -22,6 +26,7 @@ export default {
             this.axios.get('courses/create',this.config)
             .then((ress) => {
                 this.items = ress.data.category
+                this.category_courses = ress.data.category_courses
             })
             .catch((err) => console.log(err))
         }

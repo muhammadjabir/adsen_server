@@ -254,9 +254,9 @@
 
 </template>
 <script>
-
 import CrudMixin from '../../mixins/CrudMixin'
 import Pusher from 'pusher-js';
+ import Echo from 'laravel-echo';
 export default {
     name: 'leads',
     data() {
@@ -437,21 +437,58 @@ export default {
     
         
     },
-    created(){
+    async created(){
         this.getKelas()
-         var pusher = new Pusher('2d64dc4842b9aefc8d89', {
-        cluster: 'ap1',
-        forceTLS: true
+         var pusher = new Pusher('fdsfs23424rf', {
+        cluster: 'mt1',
+        // forceTLS: true,
+        broadcaster: 'pusher',
+        // key: 'fdsfs23424rf',
+        wsHost: window.location.hostname,
+        wsPort: 6001,
+        // enabledTransports: ['ws', 'wss']
         });
         let fngsi =() => {
             this.go()
         }
-        fngsi()
+        // fngsi()
         var channel = pusher.subscribe('push');
-        channel.bind("my-push", function(data) {
+        channel.bind("test.channel", function(data) {
         // app.messages.push(JSON.stringify(data));
+        console.log('test')
              fngsi()
         });
+       
+
+    //     window.Pusher = require('pusher-js');
+
+    //     window.Echo = new Echo({
+    //         // broadcaster: 'pusher',
+    //         // key: process.env.MIX_PUSHER_APP_KEY,
+    //         // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    //         // encrypted: true
+    //         broadcaster: 'pusher',
+    //         key: 'fdsfs23424rf',
+    //         wsHost: window.location.hostname,
+    //         wsPort: 6001,
+    //         enabledTransports: ['ws', 'wss']
+           
+    //     });
+        
+    //     window.Echo.connector.pusher.connection.bind('connected', () => {
+    //     console.log('connected');
+    //     });
+        
+    //    window.Echo.channel('channel-notif')
+    //     .listen('test.channel', (e) => {
+    //         console.log('test')
+    //     });
+    },
+    updated() {
+        
+    },
+    mounted(){
+        
     }
     
 

@@ -37,6 +37,6 @@ class push implements ShouldBroadcast
     }
     public function broadcastAs()
         {
-            return 'my-push';
+            return 'test.channel';
         }
 }

@@ -25,6 +25,7 @@
         "webpack-livereload-plugin": "^1.2.0"
     },
     "dependencies": {
+        "laravel-echo": "^1.8.1",
         "pusher-js": "^5.1.1",
         "vue-router": "^3.3.2",
         "vuetify": "^2.2.32",

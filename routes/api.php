@@ -58,6 +58,7 @@ Route::resource('trainers', 'Users\TrainersController');
 Route::resource('class-management', 'Kelas\KelasController');
 Route::resource('courses', 'Courses\CoursesController');
 Route::resource('leads', 'Resepcionist\ResepcionistController');
+Route::resource('rekening', 'Rekening\RekeningController');
 
 Route::resource('students', 'Students\StudentsController');
 

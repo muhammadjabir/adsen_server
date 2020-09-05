@@ -14,6 +14,7 @@ import StudentRouter from './routes/Students'
 import ScheduleRouter from './routes/Schedule'
 import JadwalRouter from './routes/Jadwal'
 import LeadsRouter from './routes/Leads'
+import RekeningRouter from './routes/Rekening'
 // import Vuetify from 'vuetify'
 // Vue.use(Vuetify)
 import './plugins/vuetify.js'
@@ -44,7 +45,8 @@ const router = new Router({
             StudentRouter,
             ScheduleRouter,
             JadwalRouter,
-            LeadsRouter
+            LeadsRouter,
+            RekeningRouter
         ]
 
     },

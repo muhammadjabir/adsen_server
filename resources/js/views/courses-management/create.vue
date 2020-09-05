@@ -51,6 +51,16 @@
                                     required
                                 ></v-select>
 
+                                <v-select
+                                    v-model="category_course"
+                                    :items="category_courses"
+                                    :rules="[v => !!v || 'Item is required']"
+                                    label="Category Courses"
+                                    item-text="description"
+                                    item-value="id"
+                                    required
+                                ></v-select>
+
                                 <v-text-field
                                 v-model="harga"
                                 :rules="nameRules"
@@ -60,9 +70,19 @@
 
                                 <v-text-field
                                 v-model="diskon"
-                                :rules="nameRules"
+                               
                                 label="Diskon"
-                                required
+                            
+                                ></v-text-field>
+
+                                <v-text-field
+                                v-model="link_tokped"
+                                label="Link Tokopedia"
+                                ></v-text-field>
+
+                                <v-text-field
+                                v-model="link_bukalapak"
+                                label="Link Bukalapak"
                                 ></v-text-field>
 
 
@@ -122,6 +142,9 @@ export default {
             data.append('foto' , this.foto)
             data.append('harga' , this.harga)
             data.append('diskon' , this.diskon)
+             data.append('link_tokped' , this.link_tokped)
+            data.append('link_bukalapak' , this.link_bukalapak)
+            data.append('id_category_courses' , this.category_course)
             await this.axios.post(url,data,this.config)
             .then((ress) => {
                 console.log(ress)

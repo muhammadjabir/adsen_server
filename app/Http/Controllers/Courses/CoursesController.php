@@ -47,8 +47,10 @@ class CoursesController extends Controller
     public function create()
     {
         $category = \App\Models\MasterDataDetail::where('id_master_data',8)->get();
+        $category_courses = \App\Models\MasterDataDetail::where('id_master_data',11)->get();
         return response()->json([
-            'category' => $category
+            'category' => $category,
+            'category_courses' => $category_courses
         ]);
     }
 
@@ -88,6 +90,9 @@ class CoursesController extends Controller
         $courses->harga = $request->harga;
         $courses->diskon = $request->diskon;
         $courses->id_category = $request->id_category;
+        $courses->id_category_courses = $request->id_category_courses;
+        $courses->link_tokped = $request->link_tokped;
+        $courses->link_bukalapak = $request->link_bukalapak;
         if ($request->file('foto')) {
             $foto =  $request->file('foto')->store('foto_courses','public');
             $courses->foto = $foto;
@@ -122,9 +127,11 @@ class CoursesController extends Controller
     {
         $category =  \App\Models\MasterDataDetail::where('id_master_data',8)->get();
         $courses = Courses::findOrFail($id);
+        $category_courses = \App\Models\MasterDataDetail::where('id_master_data',11)->get();
         return response()->json([
             'courses' =>$courses,
-            'category' => $category
+            'category' => $category,
+            'category_courses' => $category_courses
         ]);
     }
 
@@ -154,6 +161,9 @@ class CoursesController extends Controller
         $courses->name = $request->name;
         $courses->slug = Str::slug($request->name,'-');
         $courses->id_category = $request->id_category;
+        $courses->id_category_courses = $request->id_category_courses;
+        $courses->link_tokped = $request->link_tokped;
+        $courses->link_bukalapak = $request->link_bukalapak;
         $courses->harga = $request->harga;
         $courses->diskon = $request->diskon;
         if ($request->file('foto')) {

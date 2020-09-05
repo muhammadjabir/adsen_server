@@ -12,6 +12,8 @@
 */
 
 use App\Mail\SendInvoiceTemplate;
+use App\Models\CalonSiswa;
+use App\Models\Kelas;
 
 Route::get('/test',function(){
     $user = \App\User::findOrFail(1);
@@ -20,7 +22,8 @@ Route::get('/test',function(){
 
 });
 Route::get('/test/email',function(){
-    return view('test');
+    $data = CalonSiswa::with(['kelas_pilihan.courses'])->find(3);
+    return view('email',compact('data'));
 });
 Route::get('/',function(){
     return redirect('/jadwal');

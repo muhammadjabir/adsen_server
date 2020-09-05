@@ -129,26 +129,17 @@
             </table>
         </div>
 
-        <p>Transfer Via :</p>
-        <div class="bank">
-            <div class="atm">
-                <p>BCA</p>
-                <p>A/C : 1213131313</p>
-                <p>A/N : 3243243242</p>
-            </div>
-            <div class="atm">
-                <p>BCA</p>
-                <p>A/C : 1213131313</p>
-                <p>A/N : 3243243242</p>
-            </div>
-            <div class="atm">
-                <p>BCA</p>
-                <p>A/C : 1213131313</p>
-                <p>A/N : 3243243242</p>
-            </div>
+        <p>Pembayaran Via :</p>
+        <div class="transfer">
+            <table style="width: 100%">
+                <tr >
+                    <td><img src="https://redhunter.id/wp-content/uploads/2020/01/logo_tokopedia-1.png" alt="" width="120px"></td>
+                    <td><img src="https://redhunter.id/wp-content/uploads/2020/01/logo_bukalapak-1.png" alt="" width="120px"></td>
+                </tr>
+            </table>
         </div>
 
-        <img src="https://redhunter.id/wp-content/uploads/2020/01/logo-redhunter-red.png" class="bg-invoice"  style="opacity: 0.1;" alt="">
+        {{-- <img src="https://redhunter.id/wp-content/uploads/2020/01/logo-redhunter-red.png" class="bg-invoice"  style="opacity: 0.1;" alt=""> --}}
 
         <p>*Silahkan Konfirmasi Pembayaran ke Email ini</p>
 
