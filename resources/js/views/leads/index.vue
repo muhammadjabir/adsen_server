@@ -441,7 +441,7 @@ export default {
         this.getKelas()
          var pusher = new Pusher('fdsfs23424rf', {
         cluster: 'mt1',
-        // forceTLS: true,
+        forceTLS: true,
         broadcaster: 'pusher',
         // key: 'fdsfs23424rf',
         wsHost: window.location.hostname,
