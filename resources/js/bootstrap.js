@@ -40,7 +40,7 @@ window.Echo = new Echo({
     // encrypted: true
     broadcaster: 'pusher',
 	key: process.env.MIX_PUSHER_APP_KEY,
-	wsHost: window.location.hostname,
+	wsHost:'development.codehunter.academy',
     wsPort: 6001,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     wssPort: 6001,
