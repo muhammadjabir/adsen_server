@@ -446,6 +446,9 @@ export default {
         // key: 'fdsfs23424rf',
         wsHost: window.location.hostname,
         wsPort: 6001,
+        wssPort: 6001,
+        disableStats: true,
+        forceTLS: true
         // enabledTransports: ['ws', 'wss']
         });
         let fngsi =() => {
