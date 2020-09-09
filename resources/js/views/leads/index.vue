@@ -439,54 +439,52 @@ export default {
     },
     async created(){
         this.getKelas()
-        //  var pusher = new Pusher('fdsfs23424rf', {
-        // cluster: 'mt1',
-        // encrypted: true,
-        // broadcaster: 'pusher',
-        // // key: 'fdsfs23424rf',
-        // wsHost: window.location.hostname,
-        // wsPort: 6001,
-        // wssPort: 6001,
-        // disableStats: true,
-        // enabledTransports: ['ws', 'wss']
-        // });
+         var pusher = new Pusher('fdsfs23424rf', {
+        cluster: 'mt1',
+        encrypted: true,
+        broadcaster: 'pusher',
+        key: 'fdsfs23424rf',
+        wsHost: 'development.codehunter.academy',
+        wsPort: 6001,
+        wssPort: 6001,
+        disableStats: true,
+        enabledTransports: ['ws', 'wss']
+        });
         let fngsi =() => {
             this.go()
         }
-        // // fngsi()
-        // var channel = pusher.subscribe('push');
-        // channel.bind("test.channel", function(data) {
-        // // app.messages.push(JSON.stringify(data));
-        // console.log('test')
-        //      fngsi()
-        // });
-       
-
-        window.Pusher = require('pusher-js');
-
-        window.Echo = new Echo({
-            // broadcaster: 'pusher',
-            // key: process.env.MIX_PUSHER_APP_KEY,
-            cluster: 'mt1',
-            // encrypted: true
-            broadcaster: 'pusher',
-            key: 'fdsfs23424rf',
-            wsHost: window.location.hostname,
-            wsPort: 6001,
-            wssPort: 6001,
-            disableStats: true,
-           
-        });
-        
-        window.Echo.connector.pusher.connection.bind('connected', () => {
-        console.log('connected');
-        });
-        
-       window.Echo.channel('push')
-        .listen('test.channel', (e) => {
-            console.log('test')
+        // fngsi()
+        var channel = pusher.subscribe('push');
+        channel.bind("test.channel", function(data) {
+        // app.messages.push(JSON.stringify(data));
+        console.log('test')
              fngsi()
         });
+       
+
+    //     window.Pusher = require('pusher-js');
+
+    //     window.Echo = new Echo({
+    //         // broadcaster: 'pusher',
+    //         // key: process.env.MIX_PUSHER_APP_KEY,
+    //         // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    //         // encrypted: true
+    //         broadcaster: 'pusher',
+    //         key: 'fdsfs23424rf',
+    //         wsHost: window.location.hostname,
+    //         wsPort: 6001,
+    //         enabledTransports: ['ws', 'wss']
+           
+    //     });
+        
+    //     window.Echo.connector.pusher.connection.bind('connected', () => {
+    //     console.log('connected');
+    //     });
+        
+    //    window.Echo.channel('channel-notif')
+    //     .listen('test.channel', (e) => {
+    //         console.log('test')
+    //     });
     },
     updated() {
         
