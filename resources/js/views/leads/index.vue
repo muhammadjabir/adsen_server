@@ -450,9 +450,9 @@ export default {
         // disableStats: true,
         // enabledTransports: ['ws', 'wss']
         // });
-        // let fngsi =() => {
-        //     this.go()
-        // }
+        let fngsi =() => {
+            this.go()
+        }
         // // fngsi()
         // var channel = pusher.subscribe('push');
         // channel.bind("test.channel", function(data) {
@@ -467,7 +467,7 @@ export default {
         window.Echo = new Echo({
             // broadcaster: 'pusher',
             // key: process.env.MIX_PUSHER_APP_KEY,
-            // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+            cluster: 'mt1',
             // encrypted: true
             broadcaster: 'pusher',
             key: 'fdsfs23424rf',
@@ -482,9 +482,10 @@ export default {
         console.log('connected');
         });
         
-       window.Echo.channel('channel-notif')
+       window.Echo.channel('push')
         .listen('test.channel', (e) => {
             console.log('test')
+             fngsi()
         });
     },
     updated() {
