@@ -448,7 +448,7 @@ export default {
         wsPort: 6001,
         wssPort: 6001,
         disableStats: true,
-        // enabledTransports: ['ws', 'wss']
+        enabledTransports: ['ws', 'wss']
         });
         let fngsi =() => {
             this.go()
