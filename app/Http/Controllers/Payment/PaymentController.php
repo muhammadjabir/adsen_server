@@ -22,8 +22,8 @@ class PaymentController extends Controller
             'Content-Type' => 'application/json',
         ])->post('http://apidev.payhost.io/api/oauth/token',[
             "grant_type"=>"client_credentials",
-            "client_id"=>$this->settings()['client_id'],
-            "client_secret"=>$this->settings()['client_secret'],
+            "client_id"=>env('CLIENT_ID'),
+            "client_secret"=>env('CLIENT_SECRET'),
             "scope"=>"*"
         ]);
         return $response->json();
@@ -32,11 +32,11 @@ class PaymentController extends Controller
     public function get_method() {
         $token=$this->get_token();
         $signature_pattern = "GET:/api/v1/get_payment_method:{$token['access_token']}";
-        $signature = hash_hmac('sha256', $signature_pattern,$this->settings()['api_secret']);
+        $signature = hash_hmac('sha256', $signature_pattern,env('API_SECRET_NUSPAY'));
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'x-signature' => $signature,
-            'x-api-key' => $this->settings()['api_key']
+            'x-api-key' => env('API_KEY_NUSPAY')
         ])->withToken($token['access_token'])
         ->get('http://apidev.payhost.io/api/v1/get_payment_method');
         return $response->json();
@@ -49,11 +49,11 @@ class PaymentController extends Controller
         $generate_md5= md5("RH{$data_leads->kode_invoice}:{$data_leads->harga}");
         $reference_no = $data_leads->kode_invoice . rand(10000000,99999999);
         $signature_pattern = "POST:/api/v1/create:{$token['access_token']}:$generate_md5";
-        $signature = hash_hmac('sha256', $signature_pattern,$this->settings()['api_secret']);
+        $signature = hash_hmac('sha256', $signature_pattern,env('API_SECRET_NUSPAY'));
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'x-signature' => $signature,
-            'x-api-key' =>$this->settings()['api_key']
+            'x-api-key' =>env('API_KEY_NUSPAY')
         ])->withToken($token['access_token'])
         ->post('http://apidev.payhost.io//api/v1/create',[
             "reference_no"  =>$reference_no,
@@ -69,4 +69,5 @@ class PaymentController extends Controller
         ]);
         return $response->json();
     }
+    
 }
