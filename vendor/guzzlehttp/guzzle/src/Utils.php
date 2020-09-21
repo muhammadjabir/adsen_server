@@ -387,17 +387,6 @@ EOT
             return \idn_to_ascii($domain, $options, \INTL_IDNA_VARIANT_UTS46, $info);
         }
 
-<<<<<<< HEAD
-        /*
-         * The Idn class is marked as @internal. Verify that class and method exists.
-         */
-        if (method_exists(Idn::class, 'idn_to_ascii')) {
-            return Idn::idn_to_ascii($domain, $options, Idn::INTL_IDNA_VARIANT_UTS46, $info);
-        }
-
-        throw new \RuntimeException('ext-intl or symfony/polyfill-intl-idn not loaded or too old');
-=======
         throw new \Error('ext-idn or symfony/polyfill-intl-idn not loaded or too old');
->>>>>>> 5c19853de46873ff93a345923d1793017419dfaa
     }
 }
