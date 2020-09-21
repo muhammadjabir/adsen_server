@@ -66,7 +66,7 @@ class StudentsController extends Controller
         }
         $user = new User;
         $user->name = $request->name;
-        $user->password = \Hash::make('123456');
+        $user->password = \Hash::make('redhunter123');
         $user->email = $request->username;
         $user->kelamin= $request->kelamin;
         $user->id_role = 42;

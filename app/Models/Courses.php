@@ -18,4 +18,11 @@ class Courses extends Model
     public function getFotoCoursesAttribute(){
         return asset('storage/' .$this->foto) ;
     }
+
+    public function category_courses() {
+        return $this->belongsTo('App\Models\MasterDataDetail','id_category_courses');
+    }
+    public function video() {
+        return $this->hasMany('App\Models\Video','id_courses');
+    }
 }

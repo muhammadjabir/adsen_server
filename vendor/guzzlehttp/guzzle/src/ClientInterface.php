@@ -1,4 +1,5 @@
 <?php
+
 namespace GuzzleHttp;
 
 use GuzzleHttp\Exception\GuzzleException;
@@ -13,9 +14,13 @@ use Psr\Http\Message\UriInterface;
 interface ClientInterface
 {
     /**
-     * @deprecated Will be removed in Guzzle 7.0.0
+     * The Guzzle major version.
      */
+<<<<<<< HEAD
     const VERSION = '6.5.5';
+=======
+    const MAJOR_VERSION = 7;
+>>>>>>> 5c19853de46873ff93a345923d1793017419dfaa
 
     /**
      * Send an HTTP request.
@@ -24,10 +29,9 @@ interface ClientInterface
      * @param array            $options Request options to apply to the given
      *                                  request and to the transfer.
      *
-     * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function send(RequestInterface $request, array $options = []);
+    public function send(RequestInterface $request, array $options = []): ResponseInterface;
 
     /**
      * Asynchronously send an HTTP request.
@@ -35,10 +39,8 @@ interface ClientInterface
      * @param RequestInterface $request Request to send
      * @param array            $options Request options to apply to the given
      *                                  request and to the transfer.
-     *
-     * @return PromiseInterface
      */
-    public function sendAsync(RequestInterface $request, array $options = []);
+    public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface;
 
     /**
      * Create and send an HTTP request.
@@ -51,10 +53,9 @@ interface ClientInterface
      * @param string|UriInterface $uri     URI object or string.
      * @param array               $options Request options to apply.
      *
-     * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function request($method, $uri, array $options = []);
+    public function request(string $method, $uri, array $options = []): ResponseInterface;
 
     /**
      * Create and send an asynchronous HTTP request.
@@ -67,10 +68,8 @@ interface ClientInterface
      * @param string              $method  HTTP method
      * @param string|UriInterface $uri     URI object or string.
      * @param array               $options Request options to apply.
-     *
-     * @return PromiseInterface
      */
-    public function requestAsync($method, $uri, array $options = []);
+    public function requestAsync(string $method, $uri, array $options = []): PromiseInterface;
 
     /**
      * Get a client configuration option.
@@ -83,5 +82,5 @@ interface ClientInterface
      *
      * @return mixed
      */
-    public function getConfig($option = null);
+    public function getConfig(?string $option = null);
 }

@@ -16,24 +16,46 @@ use DB;
 class ResepcionistController extends Controller
 {
     public function sendInvoice($id){
-       $data = CalonSiswa::with(['kelas_pilihan'=>function($q){
-           $q->withTrashed()->with(['courses'=>function($q){
-               $q->withTrashed();
-           }]);
-       }])->findOrFail($id);
-       $tgl = \Carbon\Carbon::now();
-        $kode = CalonSiswa::whereYear('created_at',$tgl->format('Y'))->whereMonth('created_at',$tgl->format('m'))->orderBy('created_at','desc')
-        ->first();
-        $kode = $kode->kode ? $kode->kode + 1 : $tgl->format('Ym') . '001';
-        if (!$data->kode_invoice) {
-            $data->kode_invoice = $kode;
-        }
+        $data = CalonSiswa::with(['kelas_pilihan'=>function($q){
+            $q->withTrashed()->with(['courses'=>function($q){
+                $q->withTrashed();
+            }]);
+        }])->findOrFail($id);
+        // $tgl = \Carbon\Carbon::now();
+        // $kode = CalonSiswa::whereYear('created_at',$tgl->format('Y'))->whereMonth('created_at',$tgl->format('m'))->orderBy('created_at','desc')
+        // ->first();
+        // $kode = $kode->kode ? $kode->kode + 1 : $tgl->format('Ym') . '001';
+        // if (!$data->kode_invoice) {
+        //     $data->kode_invoice = $kode;
+        // }
        
         $data->harga = $data->kelas_pilihan->courses->harga;
         $data->diskon = $data->kelas_pilihan->courses->diskon;
         $data->save();
        SendInvoiceJobs::dispatch($data);
 
+    }
+
+    public function edit($id) {
+        $lead = CalonSiswa::findOrFail($id);
+        $kelas = \App\Models\Kelas::where('status_pendaftaran',1)->get();
+        return response()->json([
+            'lead' =>$lead,
+            'kelas' => $kelas
+        ]);
+    }
+
+    public function update(Request $request,$id) {
+        $data = CalonSiswa::findOrFail($id);
+        $data->nama = $request->nama;
+        $data->email = $request->email;
+        $data->nohp = $request->nohp;
+        $data->nowa = $request->nowa;
+        $data->kelas = $request->kelas;
+        $data->save();
+        return response()->json([
+            'message' => 'Success Edit data lead'
+        ],200);
     }
 
     public function index(Request $request){

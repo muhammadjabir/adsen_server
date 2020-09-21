@@ -12,7 +12,14 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-
+//     API_KEY_NUSPAY=gr-87046633
+// API_SECRET_NUSPAY=9lwelkyxx5tuentuylf1wa8fca5ptwxx
+// CLIENT_ID=13
+// CLIENT_SECRET=ddkAk5wt41FEcqmmdaj6y46EwXYDvCWAsF2TGQur
+    'client_id' => env('CLIENT_ID',13),
+    'client_secret' => env('CLIENT_SECRET','dkAk5wt41FEcqmmdaj6y46EwXYDvCWAsF2TGQur'),
+    'api_key_nuspay'=> env('API_KEY_NUSPAY','9lwelkyxx5tuentuylf1wa8fca5ptwxx'),
+    'api_secret_nuspay' => env('API_SECRET_NUSPAY','ddkAk5wt41FEcqmmdaj6y46EwXYDvCWAsF2TGQur'),
     'name' => env('APP_NAME', 'Laravel'),
 
     /*

@@ -19,40 +19,42 @@
                                 v-model="valid"
                                 :lazy-validation="lazy"
                                 >
-                                <input type="file" style="display:none; " id="foto_profile" ref="foto_profile" accept="image/*" @change="eventChange">
                                 <label for="" align="left">Edit Lead</label>
 
                                 <v-text-field
-                                v-model="username"
-                                :rules="nameRules"
-                                label="Username"
-                                required
-                                ></v-text-field>
-
-                                <v-text-field
                                 v-model="name"
-                                :rules="nameRules"
+                                :rules="requiredRules"
                                 label="Name"
                                 required
                                 ></v-text-field>
 
-                                <v-select
-                                    v-model="kelamin"
-                                    :items="kelamins"
-                                    :rules="[v => !!v || 'Tidak Boleh Kosong']"
-                                    label="Kelamin"
-                                    required
-                                ></v-select>
+                                <v-text-field
+                                v-model="email"
+                                :rules="requiredRules"
+                                label="Email"
+                                required
+                                ></v-text-field>
 
-                                 <v-select
-                                    v-model="kelas_student"
+                                 <v-text-field
+                                v-model="nohp"
+                                :rules="requiredRules"
+                                label="Nomor Handphone"
+                                required
+                                ></v-text-field>
+
+                                 <v-text-field
+                                v-model="nowa"
+                                :rules="requiredRules"
+                                label="Nomor Whatsapp"
+                                required
+                                ></v-text-field>
+
+                                <v-select
+                                    v-model="kelas_pilihan"
                                     :items="kelas"
-                                    attach
-                                    chips
                                     label="Class"
                                     item-text="name"
                                     item-value="id"
-                                    multiple
                                 ></v-select>
 
                                 <v-row>
@@ -89,28 +91,29 @@
 </template>
 <script>
 // import {mapActions} from 'vuex'
-import StudentsMixin from '../../mixins/StudentsMixin'
+import LeadsMixin from '../../mixins/LeadsMixin'
 export default {
-    name: 'masterdata.edit',
+    name: 'leadmixin.edit',
     data: () => ({
         imgurl: 'storage/default/icon_admin.jpg',
         foto:''
 
    }),
 
-    mixins:[StudentsMixin],
+    mixins:[LeadsMixin],
     methods:{
         async save(){
             this.loading = true
             let url = window.location.pathname
             url = url.split('/')
-            url = "/" + url[1]
+            url = `${url[1]}/${url[2]}`
             let data = new FormData()
-            data.append('name',this.name)
-            data.append('foto' , this.foto)
-            data.append('kelamin',this.kelamin)
-            data.append('username',this.username)
-            data.append('kelas', JSON.stringify(this.kelas_student))
+            data.append('_method','PUT')
+            data.append('nama',this.name)
+            data.append('nowa' , this.nowa)
+            data.append('nohp',this.nohp)
+            data.append('email',this.email)
+            data.append('kelas', this.kelas_pilihan)
 
             await this.axios.post(url,data,this.config)
             .then((ress) => {
@@ -120,7 +123,7 @@ export default {
                     pesan:ress.data.message,
                     color:'success'
                 })
-                this.$router.push(url)
+                this.$router.push('/leads')
             })
             .catch((err)=>{
                 if (err.response.status == 400 ) {
@@ -143,21 +146,25 @@ export default {
 
         },
 
-        eventChange(event){
-            const files = event.target.files
-            this.foto = files[0]
-             const fileReader = new FileReader()
-            fileReader.addEventListener('load',()=>{
-                this.imgurl=fileReader.result
-            })
-             fileReader.readAsDataURL(this.foto)
+        go(){
+         let url = window.location.pathname
+         this.axios.get(url,this.config)
+         .then((ress) => {
+             let lead = ress.data.lead
+             this.name = lead.nama
+             this.email = lead.email
+             this.kelas_pilihan = lead.kelas
+             this.nohp = lead.nohp
+             this.nowa = lead.nowa
+             this.kelas = ress.data.kelas
+         })
+         .catch((err) => console.log(err.response))
         }
 
     },
 
     created(){
-        this.getKelas()
-        this.imgurl = this.urlDefault + this.imgurl
+        this.go()
     }
 
 }
