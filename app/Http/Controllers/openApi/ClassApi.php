@@ -73,10 +73,15 @@ class ClassApi extends Controller
             ],400);
         }
         $id_kelas = Kelas::where('slug',$request->kelas)->first();
+        $tgl = \Carbon\Carbon::now();
+        $kode = CalonSiswa::whereYear('created_at',$tgl->format('Y'))->whereMonth('created_at',$tgl->format('m'))->orderBy('created_at','desc')
+        ->first();
+        $kode = $kode ? $kode->kode_invoice + 1 : $tgl->format('Ym') . '001';
         $data = new CalonSiswa();
         $data->nohp = $request->nohp;
         $data->nowa = $request->nowa;
         $data->email = $request->email;
+        $data->kode_invoice = $kode;
         $data->nama = $request->nama;
         $data->status = $request->status;
         $data->kelas = $id_kelas->id;

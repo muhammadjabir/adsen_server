@@ -24,6 +24,8 @@ Route::post('/edit-profile','AuthJWT\AuthController@EditProfile');
 Route::get('/jadwal','Schedule\ScheduleController@api_schedule');
 Route::get('/class-register','openApi\ClassApi@index');
 Route::post('/register-calon','openApi\ClassApi@create');
+Route::post('/payment/create','Payment\PaymentController@create_invoice');
+Route::get('/payment/method','Payment\PaymentController@get_method');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -59,6 +61,7 @@ Route::resource('class-management', 'Kelas\KelasController');
 Route::resource('courses', 'Courses\CoursesController');
 Route::resource('leads', 'Resepcionist\ResepcionistController');
 Route::resource('rekening', 'Rekening\RekeningController');
+Route::resource('video', 'Video\VideoController');
 
 Route::resource('students', 'Students\StudentsController');
 
