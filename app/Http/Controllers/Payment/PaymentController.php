@@ -69,5 +69,34 @@ class PaymentController extends Controller
         ]);
         return $response->json();
     }
+
+    public function pembayaran_success(Request $request) {
+        $validator = \Validator::make($request->all(), [
+            'reference_no'=>'required',
+            'key'=>'required',
+        ],[
+            '*.required'=> ':attribute required'
+        ])->setAttributeNames(['reference_no'=>'Reference Number',
+            'key' => 'Key',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'status_code'=>400,
+                'message' => $validator->errors()->first()
+            ],400);
+        }
+
+        if ($request->key !== 'a45630023243') {
+            return response()->json([
+                'status_code' => 403,
+                'message' => 'Unauthorized',
+            ],403);
+        }
+        return response()->json([
+            'message' => 'Success'
+        ],200);
+        
+    }
     
 }
