@@ -28,15 +28,7 @@ class ResepcionistController extends Controller
             $courses = Courses::where('id_category',$id_category)->where('id','!=',$data->kelas_pilihan->courses->id)->get();
         }else {
             $courses = [$data->kelas_pilihan->courses];
-        }
-        // $tgl = \Carbon\Carbon::now();
-        // $kode = CalonSiswa::whereYear('created_at',$tgl->format('Y'))->whereMonth('created_at',$tgl->format('m'))->orderBy('created_at','desc')
-        // ->first();
-        // $kode = $kode->kode ? $kode->kode + 1 : $tgl->format('Ym') . '001';
-        // if (!$data->kode_invoice) {
-        //     $data->kode_invoice = $kode;
-        // }
-       
+        }    
         $data->harga = $data->kelas_pilihan->courses->harga;
         $data->diskon = $data->kelas_pilihan->courses->diskon;
         $data->no_reference = '';
