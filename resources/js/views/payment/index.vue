@@ -248,10 +248,10 @@ export default {
     },
 
     async created(){
-        this.loading = false
+       
         this.get_payment_method()
         this.go()
-        this.loading = true
+        
     }
 
 }
