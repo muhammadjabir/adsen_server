@@ -32,6 +32,6 @@ class SendInvoiceJobs implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->data->email)->send(new SendInvoice($this->data));
+        Mail::to($this->data['email'])->send(new SendInvoice($this->data));
     }
 }

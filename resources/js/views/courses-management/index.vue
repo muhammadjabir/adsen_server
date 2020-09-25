@@ -39,9 +39,10 @@
                             <th class="text-left">Image</th>
                             <th class="text-left">Name Courses</th>
                             <th class="text-left">Category</th>
-                            <th class="text-left">Status</th>
+                            
                             <th class="text-left">Harga</th>
                             <th class="text-left">Diskon</th>
+                            <th class="text-left">Status</th>
                             <th class="text-left">Action</th>
                             </tr>
                         </thead>

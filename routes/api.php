@@ -27,6 +27,7 @@ Route::get('/class-register','openApi\ClassApi@index');
 Route::post('/register-calon','openApi\ClassApi@create');
 Route::post('/payment/create','Payment\PaymentController@create_invoice');
 Route::get('/payment/method','Payment\PaymentController@get_method');
+Route::post('/payment/courses/{invoice}','Payment\PaymentController@index');
 Route::post('/v1/payment/courses', 'Payment\PaymentController@pembayaran_success');
 
 

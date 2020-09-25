@@ -90,6 +90,7 @@ class ClassApi extends Controller
         $data->tgl_lahir = $request->tgl_lahir;
         $data->catatan = $request->catatan;
         $data->id_darimana = $cek_info->id;
+        $data->encrypt_invoice = hash('sha256', $kode);
         if($data->save()){
             event(new push($data));
         };

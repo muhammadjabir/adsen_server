@@ -49,7 +49,7 @@ Route::get('/',function(){
 });
 Route::get('/{any}',function(){
     return view('index');
-})->where('any', '.*');
+})->where('any', '.*')->name('home.index');
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

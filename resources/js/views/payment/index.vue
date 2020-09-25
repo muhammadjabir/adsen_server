@@ -1,8 +1,9 @@
 <template>
     <v-app>
-        <v-container>
-
-            <v-row>
+        <v-container v-if="loading">
+            <h2>Redhunter Academy</h2>
+            <v-row v-if="status_code == 200">
+            
                 <v-col
                cols="12"
                md="7"
@@ -12,25 +13,45 @@
                 class="card-payment"
                 >
                 
-                <h2>No Invoice</h2>
+                <h2>No Invoice : RH{{customer.kode_invoice}}</h2>
                 <hr>
                 <p>
                 Billed to : 
                 </p>
                 <span>
-                    Muhammad Jabir, Jl selali dihari - 089232323
+                    {{customer.nama}}, {{customer.alamat}} - {{customer.nohp}}
                 </span>
                 <hr>
                 <br>
-                <table style="width:100%">
+                <table style="width:100%" class="table">
                     <thead>
                         <tr>
                             <th>Kelas</th>
-                            <th>Courses</th>
+                            <th>Ketegori Kursus</th>
+                            <th>Kursus</th>
                         </tr>
                     </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{customer.kelas}}</td>
+                            <td>{{category_courses}}</td>
+                            <td><ul>
+                                <li v-for="item in courses" :key="item.name">{{item.name}}</li>
+                            </ul></td>
+                        </tr>
+                    </tbody>
                 </table>
+                <br>
+                <hr>
+                <div style="text-align:right; color:black; padding:20px; margin-top:5px; background-color:#f5f5f5">
+                    <h3>
+                    Total(IDR) {{customer.harga | formatPrice}}
+                        
+                    </h3>
+                </div>
                 </v-card>
+                
                </v-col>
 
                <v-col
@@ -78,6 +99,62 @@
                </v-col>
                 
             </v-row>
+
+            <div v-else-if="status_code == 201">
+                <v-card
+                outlined
+                class="card-payment"
+                >
+                    <v-img :src="imgChoice" style="max-width:200px;margin:auto"></v-img> 
+                    <p class="text-center">Virtual Account</p>
+                    <hr>
+                    <table class="virtual-success" >
+                        <tr>
+                            <th>Reference Number</th>
+                            <th>{{customer.reference_no}}</th>
+                        </tr>
+
+                        <tr>
+                            <th>Invoice Number</th>
+                            <th>{{customer.invoice_no}}</th>
+                        </tr>
+                        <tr>
+                            <th>Type BANK</th>
+                            <th>{{customer.pay_method}}</th>
+                        </tr>
+                        <tr>
+                            <th>Virtual Account Number</th>
+                            <th>{{customer.pay_code}}</th>
+                        </tr>
+                        <tr>
+                            <th>Amount</th>
+                            <th>Rp. {{customer.amount | formatPrice}}</th>
+                        </tr>
+                        <tr>
+                            <th>Deskripsi</th>
+                            <th>{{customer.description}}</th>
+                        </tr>
+                        <tr>
+                            <th>Expired Date</th>
+                            <th>{{customer.expired_at}}</th>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+                            <th>{{customer.paid_description}}</th>
+                        </tr>
+                    </table>
+                </v-card>
+            </div>
+            <div v-else>
+                 <v-card
+                outlined
+                class="pesan-error"
+                >
+                <h2>{{message}}</h2> 
+                </v-card>
+                
+            </div>
         </v-container>
     </v-app>
 </template>
@@ -86,10 +163,16 @@
 export default {
     data() {
         return {
+            loading:false,
             virtualBank:'',
             virtualAccount: [],
             choiceBank:false,
-            imgChoice:''
+            imgChoice:'',
+            customer:null,
+            courses:[],
+            category_courses:'',
+            status_code:'',
+            message:'Please Wait...',
 
         }
     },
@@ -112,12 +195,61 @@ export default {
             this.choiceBank = true
         },
         create_payment() {
+            const invoice = this.$route.params.invoice
+            let data = new FormData()
+            data.append('kode_invoice',this.customer.kode_invoice)
+            data.append('payment_method_code',this.virtualBank)
+           this.axios.post(`/payment/create`,data)
+           .then((ress)=>{
+               console.log(ress)
+               this.status_code = 201
+               this.customer = ress.data.data
+                let data = this.virtualAccount.items.find((val) => val.payment_method_code == this.customer.pay_method_code)
+                this.imgChoice = data.logo
 
+           })
+           .catch((err) => {
+                this.status_code = err.response.status
+                this.message = err.response.data.message
+           })
+        },
+        go() {
+            const invoice = this.$route.params.invoice
+            this.axios.post(`/payment/courses/${invoice}`)
+            .then((ress) => {
+                console.log(ress)
+                this.status_code = ress.status
+                if (ress.status == 200) {
+                    this.customer = ress.data.customer
+                    this.courses = ress.data.courses
+                    this.category_courses = ress.data.category_courses
+                } else {
+                    this.customer = ress.data.data
+                    let data = this.virtualAccount.items.find((val) => val.payment_method_code == this.customer.pay_method_code)
+                    this.imgChoice = data.logo
+                }
+                this.status_code = ress.status
+            })
+            .catch((err) => {
+                console.log(err.response)
+                this.status_code = err.response.status
+                this.message = err.response.data.message
+            })
         }
     },
 
-    created(){
+    filters:{
+        formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        }
+    },
+
+    async created(){
+        this.loading = false
         this.get_payment_method()
+        this.go()
+        this.loading = true
     }
 
 }
@@ -132,4 +264,42 @@ export default {
       margin:0px;
       padding:0px;
   }
+  .table {
+      border-collapse: collapse;
+      
+  }
+    table, th, td {
+    border: 1px solid #efefef;
+    }
+  .table tr td, .table tr th {
+      padding: 20px;
+      text-align: left;
+  }
+ .table tr th {
+     background-color:#f5f5f5;
+     color: black;
+ }
+    .pesan-error {
+        text-align: center;
+        color: black;
+        padding: 20px;
+    }
+
+.virtual-success {
+    margin:auto;
+    width:80%;
+}
+.virtual-success tr th:nth-child(2) {
+    width: 50%;
+    text-align: left;
+}
+.virtual-success tr th:first-child {
+    width: 50%;
+    text-align: right;
+}
+table.virtual-success, th, td {
+    margin-top: 20px;
+     padding: 20px;
+     border-collapse: collapse;
+}
 </style>
