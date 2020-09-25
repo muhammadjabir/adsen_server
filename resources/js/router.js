@@ -58,7 +58,6 @@ const router = new Router({
         name: 'login',
         component:()=>import('./views/Login.vue')
     },
-
     {
         path: '/pembayaran/courses/:invoice',
         name: 'pembayaran',

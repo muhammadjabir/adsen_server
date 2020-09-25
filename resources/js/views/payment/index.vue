@@ -91,7 +91,7 @@
                 
                 </v-radio-group>
 
-                <v-btn block outlined color="success" :disabled="virtualBank == ''" @click="choiceBank ? create_payment() : choice_bank()">
+                <v-btn :loading="loading" block outlined color="success" :disabled="virtualBank == ''" @click="choiceBank ? create_payment() : choice_bank()">
                     
                     {{choiceBank ? 'Bayar Sekarang' : 'Lanjutakan Pembayaran'}}
                     
@@ -194,12 +194,13 @@ export default {
             this.imgChoice = data.logo
             this.choiceBank = true
         },
-        create_payment() {
-            const invoice = this.$route.params.invoice
+        async create_payment() {
+            this.loading = true
+            const invoice = this.$route.params.invoice 
             let data = new FormData()
             data.append('kode_invoice',invoice)
             data.append('payment_method_code',this.virtualBank)
-           this.axios.post(`/payment/create`,data)
+            await this.axios.post(`/payment/create`,data)
            .then((ress)=>{
                console.log(ress)
                this.status_code = 201
@@ -212,6 +213,7 @@ export default {
                 this.status_code = err.response.status
                 this.message = err.response.data.message
            })
+           this.loading = false
         },
         go() {
             const invoice = this.$route.params.invoice
