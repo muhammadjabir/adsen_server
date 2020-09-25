@@ -83,7 +83,7 @@ class PaymentController extends Controller
 
     // membuat invoice
     public function create_invoice(Request $request) {
-        $data_leads = CalonSiswa::with('kelas_pilihan.courses')->where('encrypt_invoice',$request->kode_invoice)->first();
+        $data_leads = CalonSiswa::with(['kelas_pilihan.courses'])->where('encrypt_invoice',$request->kode_invoice)->first();
         $token=$this->get_token();
         if (!$token->successful()) {
             return $token->json();

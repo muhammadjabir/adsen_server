@@ -197,7 +197,7 @@ export default {
         create_payment() {
             const invoice = this.$route.params.invoice
             let data = new FormData()
-            data.append('kode_invoice',this.customer.kode_invoice)
+            data.append('kode_invoice',invoice)
             data.append('payment_method_code',this.virtualBank)
            this.axios.post(`/payment/create`,data)
            .then((ress)=>{
