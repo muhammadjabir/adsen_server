@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-container v-if="loading">
+        <v-container>
             <h2>Redhunter Academy</h2>
             <v-row v-if="status_code == 200">
             
