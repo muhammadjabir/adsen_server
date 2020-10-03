@@ -74,9 +74,9 @@ class KelasController extends Controller
             ],400);
         }
 
-        // DB::beginTransaction();
+        DB::beginTransaction();
         $error = 0;
-        // try {
+        try {
             $course = Courses::findOrFail($request->id_courses);
             $class = new \App\Models\Kelas;
             $class->name = $request->name;
@@ -88,31 +88,37 @@ class KelasController extends Controller
             $class->max_students = $request->max_student;
             $class->awal_pendaftaran = $request->awal_pendaftaran;
             $class->akhir_pendaftaran = $request->akhir_pendaftaran;
+            $class->start_class = $request->start_class;
+            $class->end_class = $request->end_class;
             // $class->harga = $course->harga;
             // $class->diskon = $course->diskon;
             if($class->save()){
                 // DB::commit();
-                if(!$class->kelasHasDay()->attach(json_decode($request->days))){
+                if($class->kelasHasDay()->attach(json_decode($request->days))){
                     // $error++;
                     // throw  new \Exception('Failed Add Days');
+                } else {
+                    $error++;
+                    throw  new \Exception('Failed Add Days');
                 };
             }else{
-                // $error++;
-                // throw  new \Exception('Failed Save Class');
+                $error++;
+                throw  new \Exception('Failed Save Class');
             };
 
             if ($error === 0) {
-                // DB::rollback();
+                DB::commit();
                 $message = 'Success Create New Class';
                 $status = 200;
             }
 
-        // } catch (\Exception $e) {
-        //     $message = $e->getMessage();
-        //     $status = 500;
+        } catch (\Exception $e) {
+            DB::rollback();
+            $message = $e->getMessage();
+            $status = 500;
 
 
-        // }
+        }
 
         return response()->json([
             'message'=>$message
@@ -151,7 +157,11 @@ class KelasController extends Controller
             'days'=> $class->kelasHasDay->pluck('id'),
             'max_student' => $class->max_students,
             'mulai' =>$class->jam_masuk,
-            'sampai' => $class->jam_pulang
+            'sampai' => $class->jam_pulang,
+            'start_class' =>$class->start_class->format('Y-m-d'),
+            'end_class' =>$class->end_class->format('Y-m-d'),
+            'awal_pendaftaran' =>$class->awal_pendaftaran->format('Y-m-d'),
+            'akhir_pendaftaran' =>$class->akhir_pendaftaran->format('Y-m-d'),
         ];
         return response()->json([
             'courses' => $courses,
@@ -199,6 +209,8 @@ class KelasController extends Controller
             $class->max_students = $request->max_student;
             $class->awal_pendaftaran = $request->awal_pendaftaran;
             $class->akhir_pendaftaran = $request->akhir_pendaftaran;
+            $class->start_class = $request->start_class;
+            $class->end_class = $request->end_class;
             if($class->save()){
                 if(!$class->kelasHasDay()->sync(json_decode($request->days))){
                     $error++;

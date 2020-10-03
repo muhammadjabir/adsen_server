@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Video;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Video\Course;
+use App\Http\Resources\Video\Course as CoursesVideo;
+use App\Http\Resources\Video\Video as VideoVideo;
 use App\Http\Resources\Video\VideoCollection;
 use App\Models\Courses;
 use App\Models\Kelas;
+use App\Models\Student;
 use App\Models\Video;
 use Illuminate\Http\Request;
 
@@ -26,21 +28,62 @@ class VideoController extends Controller
     public function index()
     {
         $user = $this->user;
-        $kelas = Kelas::with(['courses'])->select('id_kursus')->where(function($q) use($user) {
-            if($user->id_role !== 23) {
-                return $q->where('id_trainer',$user->id);
-            } 
-        })->get();
-        $courses = [];
-        foreach ($kelas as $value) {
-            if (!in_array($value->courses,$courses)) {
-                array_push($courses,$value->courses);
-            }
-        
+        if($user->id_role !== 23) {
+            $courses = Courses::with('category_courses')
+            ->whereHas('kelas' , function($q) use($user) {
+                    $q->where('id_trainer',$user->id);
+            })
+            ->whereHas('category_courses', function($q) {
+                $q->where('description','!=','Career Program');
+            })->get();
+        } else {
+            $courses = Courses::with('category_courses')
+            ->whereHas('category_courses', function($q) {
+                $q->where('description','!=','Career Program');
+            })->get();
         }
         return response()->json([
             'data' => $courses
         ]);
+    }
+
+    public function student_courses(){
+        $user = $this->user;
+        $kelas = Kelas::with('courses')->whereHas('students',function ($q) use($user) {
+            $q->where('id_user',$user->id);
+        })->get();
+        $courses = [];
+        foreach ($kelas as $value) {
+            if ($value->courses->category_courses->description == 'Career Program') {
+                $data = Courses::where('id_category',$value->courses->id_category)
+                ->whereHas('category_courses',function($q) {
+                    $q->where('description','!=','Career Program');
+                })->get();
+                foreach ($data as $course) {
+                    if (!in_array($course,$courses)) {
+                        array_push($courses,$course);
+                    }
+                }
+            }else {
+                unset($value->courses['category_courses']);
+                if (!in_array($value->courses,$courses)) {
+                    array_push($courses,$value->courses);
+                }
+               
+            };
+            
+        }
+        return response()->json([
+            'data' => $courses
+        ]);;
+    }
+
+    public function student_video(Request $request, $slug) {
+        $video = Video::where('nama_video','LIKE',"%{$request->keyword}%")
+        ->whereHas('courses' , function($q) use($slug) {
+            $q->where('slug',$slug);
+        })->orderBy('created_at','desc')->paginate(12);
+        return new VideoCollection($video);
     }
 
     /**
@@ -50,20 +93,11 @@ class VideoController extends Controller
      */
     public function create(Request $request)
     {
-        $courses = Courses::where('slug',$request->slug)->first();
-        $video = Video::where('id_courses',$courses->id)->paginate(2);
-        $data = new VideoCollection($video);
+        $video = Video::whereHas('courses' , function($q) use($request) {
+            $q->where('slug',$request->slug);
+        })->orderBy('created_at','desc')->paginate(12);
+        return new VideoCollection($video);
 
-        return [$data,$courses];
-        // return new Course($courses);
-        return response()->json([
-            'id' => $courses->id,
-            'slug' => $courses->slug,
-            'name' => $courses->name,
-            'videos' => $data->data,
-            'links' =>  $data->links,
-            'meta' => $data->meta
-        ]);
     }
 
     /**

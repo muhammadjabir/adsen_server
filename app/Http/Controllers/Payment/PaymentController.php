@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CalonSiswa\CalonSiswa as CalonSiswaCalonSiswa;
 use App\Models\CalonSiswa;
 use App\Models\Courses;
+use App\Models\Student;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-
+use DB;
 class PaymentController extends Controller
 {
     public function index($invoice) {
@@ -168,9 +170,68 @@ class PaymentController extends Controller
                 'message' => 'Unauthorized',
             ],403);
         }
+
+        
+        $error = 0;
+        DB::beginTransaction();
+        try {
+            $data = CalonSiswa::where('no_reference',$request->reference_no)->first();
+            if (!$data) {
+               $data = $this->check_invoice($request->reference_no);
+               if ($data->successful()) {
+                //    $data = $data->json();
+                   $no_invoice = explode("RH",$data->json()['data']['invoice_no']);
+                   $no_invoice = $no_invoice[1];
+                   $data = CalonSiswa::where('kode_invoice',$no_invoice)->first();
+               }
+            }
+            $data->status_pendaftaran = 1;
+            if ($data->save()) {
+                $cek_user = User::where('email',$data->email)->first();
+                if ($cek_user) {
+                    DB::table('students_class')->insert([
+                        'id_kelas' => $data->kelas
+                        ,'id_student' => $cek_user->student->id]);
+                } else {
+                    $user = new User;
+                    $user->email = $data->email;
+                    $user->name = $data->nama;
+                    $user->password = \Hash::make('redhunter123');
+                    $user->id_role = 42;
+                    if($user->save()){
+                        $siswa = new Student;
+                        $siswa->name = $data->nama; 
+                        $siswa->kelamin = $data->kelamin; 
+                        $siswa->id_user = $user->id;
+                        // $siswa->created_by = \Auth::user()->id;
+                        if($siswa->save()){
+                            DB::table('students_class')->insert([
+                            'id_kelas' => $data->kelas
+                            ,'id_student' => $siswa->id]);
+                        }
+                    } else {
+                        $error++;
+                        throw new \Exception('Gagal tambah users');
+                    }
+                }
+            } else {
+                $error++;
+                throw new \Exception('Gagal mengubah status Leads');
+            }
+
+            if ($error === 0) {
+                DB::commit();
+                $message = 'Success';
+                $status = 200;
+            }
+        
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $status = 500;
+        }
         return response()->json([
-            'message' => 'Success'
-        ],200);
+            'message' => $message
+        ],$status);
         
     }
     

@@ -38,36 +38,6 @@
                 </v-col>
                 
             </v-row>
-           
-
-            <v-dialog
-            v-model="dialog"
-            max-width="340"
-            >
-            <v-card>
-                <v-card-title class="headline">Apa anda yakin menghapus ?</v-card-title>
-
-                <v-card-actions>
-                <v-spacer></v-spacer>
-
-                <v-btn
-
-                    text
-                    @click="dialog = false"
-                >
-                    Cancel
-                </v-btn>
-
-                <v-btn
-                    color="red"
-                    text
-                    @click="deleteData()"
-                >
-                    Delete
-                </v-btn>
-                </v-card-actions>
-            </v-card>
-            </v-dialog>
         </v-container>
     </v-app>
 

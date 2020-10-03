@@ -102,6 +102,16 @@
                 </v-col>
                 
             </v-row>
+
+            <div class="text-center">
+                    <v-pagination
+                    v-model="page"
+                    :length="lengthpage"
+                    :total-visible="7"
+                    @input="go"
+                    color="grey darken-4"
+                    ></v-pagination>
+            </div>
         </v-container>
     
     <v-dialog
@@ -174,7 +184,9 @@ export default {
             idDelete: '',
             dialogDelete: false,
             editStatus: false,
-            idEdit: ''
+            idEdit: '',
+            page:1,
+            lengthpage:'',
 
         }
     },
@@ -229,9 +241,13 @@ export default {
             url = new URL(url)
             let slug = url.searchParams.get("slug");
             url = window.location.pathname
-            this.axios(`${url}?slug=${slug}`,this.config)
+            this.axios(`${url}?slug=${slug}&page=${this.page}`,this.config)
             .then((ress) => {
-                this.data = ress.data.videos
+                console.log(ress)
+                let data = ress.data
+                this.data = data.data
+                this.page = data.meta.current_page
+                this.lengthpage = data.meta.last_page
             })
             .catch((err) => {
                 console.log(err.response)

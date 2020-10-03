@@ -222,6 +222,52 @@
                                 </v-menu>
                                 </v-col>
 
+                                <v-col cols="12"  md="6">
+                                <v-menu
+                                    v-model="start_class"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date_start_class"
+                                        label="Mulai Class"
+                                        
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="date_start_class" @input="start_class = false"></v-date-picker>
+                                </v-menu>
+                                </v-col>
+
+                                <v-col cols="12"  md="6">
+                                <v-menu
+                                    v-model="end_class"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date_end_class"
+                                        label="Mulai Class"
+                                        
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="date_end_class" @input="end_class = false"></v-date-picker>
+                                </v-menu>
+                                </v-col>
+
 
                             </v-row>
 
@@ -290,6 +336,8 @@ export default {
             data.append('max_student' , this.max_student)
             data.append('awal_pendaftaran' , this.date_pendaftaran_awal)
             data.append('akhir_pendaftaran' , this.date_pendaftaran_akhir)
+            data.append('start_class' , this.date_start_class)
+            data.append('end_class' , this.date_start_class)
             await this.axios.post(url,data,this.config)
             .then((ress) => {
 

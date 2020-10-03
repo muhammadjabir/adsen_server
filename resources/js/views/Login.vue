@@ -110,7 +110,12 @@ export default {
                     menu : ress.data.menu
                 })
                 localStorage.setItem('token', this.token);
-                this.$router.push('/dahsboard')
+                if (ress.data.user.role.description == 'Student') {
+                    this.$router.push('/dashboard-student')
+                    
+                } else {
+                    this.$router.push('/dahsboard')
+                }
             })
             .catch((err) =>{
                 this.setSnakbar({

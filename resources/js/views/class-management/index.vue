@@ -44,6 +44,8 @@
                             <th class="text-left">Pendaftaran</th>
                             <th class="text-left">Awal Pendaftaran</th>
                             <th class="text-left">Akhir Pendaftaran</th>
+                            <th class="text-left">Mulai kelas</th>
+                            <th class="text-left">Selesai Kelas</th>
                             <th class="text-left">Aksi</th>
                             </tr>
                         </thead>
@@ -105,6 +107,16 @@
                                 <td class="text-left" >
 
                                 {{item.akhir_pendaftaran | setDate}}
+
+                                </td>
+                                <td class="text-left" >
+
+                                {{item.start_class | setDate}}
+
+                                </td>
+                                <td class="text-left" >
+
+                                {{item.end_class | setDate}}
 
                                 </td>
                                 <td class="text-left">
@@ -222,7 +234,7 @@ export default {
         let bulan = data.getMonth()
         let tgl = data.getDate()
         tgl = tgl.toString().length < 2 ? `0${tgl}` : `${tgl}` 
-        bulan = bulan.toString().length < 2 ? `0${bulan + 1}` : `${bulan + 1}` 
+        bulan = bulan.toString().length < 1 ? `0${bulan + 1}` : `${bulan + 1}` 
         data = `${tgl}-${bulan}-${data.getFullYear()}`
         return data
         }

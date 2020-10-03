@@ -25,4 +25,8 @@ class Courses extends Model
     public function video() {
         return $this->hasMany('App\Models\Video','id_courses');
     }
+
+    public function kelas() {
+        return $this->hasMany('App\Models\Kelas','id_kursus');
+    }
 }

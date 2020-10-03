@@ -12,14 +12,9 @@ class VideoCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    protected $course;
-    public function courses($course) {
-        $this->course = $course;
-    }
+
     public function toArray($request)
     {
-        return [
-            'course' => $this->course,
-            'videos' =>parent::toArray($request)];
+        return parent::toArray($request);
     }
 }

@@ -15,7 +15,7 @@ class Course extends JsonResource
     public function toArray($request)
     {
         $data = parent::toArray($request);
-        $datas['videos'] = $this->video()->paginate(2);
+        $datas['videos'] = $this->video()->orderBy('created_at','desc')->paginate(12);
         $datas = array_merge($data,$datas);
         return $datas;
     }

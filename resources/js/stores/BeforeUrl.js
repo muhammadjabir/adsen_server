@@ -2,7 +2,7 @@ export default {
     namespaced:true,
     state : {
         BeforeUrl : null,
-        urlDefault : 'http://development.codehunter.academy/'
+        urlDefault : `${document.location.origin}` 
 
     },
     mutations : {

@@ -26,6 +26,10 @@ export default {
         akhir_pendaftaran : false,
         date_pendaftaran_awal: new Date().toISOString().substr(0, 10),
         date_pendaftaran_akhir: new Date().toISOString().substr(0, 10),
+        start_class : false,
+        end_class : false,
+        date_start_class: new Date().toISOString().substr(0, 10),
+        date_end_class: new Date().toISOString().substr(0, 10),
 
       }),
     methods: {

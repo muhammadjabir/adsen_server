@@ -15,4 +15,7 @@ class Student extends Model
     public function getFotoProfileAttribute(){
         return $this->foto ? asset('storage/' .$this->foto) : asset('storage/defaultprofile.jpg');
     }
+    public function user() {
+        return $this->belongsTo('\App\User','id_user');
+    }
 }

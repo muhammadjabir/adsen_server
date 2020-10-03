@@ -32,6 +32,7 @@ Route::post('/v1/payment/courses', 'Payment\PaymentController@pembayaran_success
 
 
 Route::middleware(['auth:api'])->group(function () {
+    Route::get('/dashboard-student','Dashboard\DashboardController@student');
     Route::get('/students/trash', 'Trash\TrashController@student');
     Route::get('/courses/trash', 'Trash\TrashController@courses');
     Route::get('/users/trash', 'Trash\TrashController@user');
@@ -56,6 +57,8 @@ Route::post('/class-management/status','Kelas\KelasController@ChangeStatus');
 Route::get('/students/class', 'Students\StudentsController@kelas');
 Route::get('/ganti-status', 'Resepcionist\ResepcionistController@changeStatus');
 Route::post('/send-invoice/{id}/mail', 'Resepcionist\ResepcionistController@sendInvoice');
+Route::get('/student-courses', 'Video\VideoController@student_courses');
+Route::get('/student-courses/video/{slug}', 'Video\VideoController@student_video');
 Route::resource('masterdata', 'Masterdata\MasterdataController');
 Route::resource('menu', 'Menu\MenuController');
 Route::resource('users', 'Users\UsersController');

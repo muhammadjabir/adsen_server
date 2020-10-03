@@ -108,7 +108,7 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         $user =$this->guard();
-        if ($user->id_role !== 42) {
+        // if ($user->id_role !== 42) {
             $menu = Menu::with(['child_menu' => function($q) use ($user) {
                 $q->whereIn('id',$user->role->role_menu->child);
             }])->whereIn('id',$user->role->role_menu->parent)->orderBy('priority','desc')->get();
@@ -119,16 +119,16 @@ class AuthController extends Controller
                 'token_type' => 'bearer',
                 'expires_in' => auth()->factory()->getTTL() * 60
             ]);
-        } else {
-            $menu = '';
-            return response()->json([
-                'access_token' => $token,
-                'user' => $user,
-                'menu' => $menu,
-                'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60
-            ]);
-        }
+        // } else {
+        //     $menu = '';
+        //     return response()->json([
+        //         'access_token' => $token,
+        //         'user' => $user,
+        //         'menu' => $menu,
+        //         'token_type' => 'bearer',
+        //         'expires_in' => auth()->factory()->getTTL() * 60
+        //     ]);
+        // }
 
     }
 

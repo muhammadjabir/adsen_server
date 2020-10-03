@@ -221,7 +221,51 @@
                                     <v-date-picker v-model="date_pendaftaran_akhir" @input="akhir_pendaftaran = false"></v-date-picker>
                                 </v-menu>
                                 </v-col>
+                                 <v-col cols="12"  md="6">
+                                <v-menu
+                                    v-model="start_class"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date_start_class"
+                                        label="Mulai Class"
+                                        
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="date_start_class" @input="start_class = false"></v-date-picker>
+                                </v-menu>
+                                </v-col>
 
+                                <v-col cols="12"  md="6">
+                                <v-menu
+                                    v-model="end_class"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="date_end_class"
+                                        label="Selesai Class"
+                                        
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="date_end_class" @input="end_class = false"></v-date-picker>
+                                </v-menu>
+                                 </v-col>
 
                             </v-row>
 
@@ -288,6 +332,8 @@ export default {
             data.append('mulai' , this.time)
             data.append('sampai' , this.sampai)
             data.append('max_student' , this.max_student)
+             data.append('start_class' , this.date_start_class)
+            data.append('end_class' , this.date_end_class)
                  data.append('awal_pendaftaran' , this.date_pendaftaran_awal)
             data.append('akhir_pendaftaran' , this.date_pendaftaran_akhir)
             await this.axios.post(url,data,this.config)
@@ -347,8 +393,10 @@ export default {
                 this.max_student = ress.data.class.max_student
                 // this.date_pendaftaran_awal = this.setDate(ress.data.class.awal_pendaftaran)
                 // this.date_pendaftaran_akhir = this.setDate(ress.data.class.akhir_pendaftaran)
-                 this.date_pendaftaran_awal = ress.data.class.awal_pendaftaran.format('YYYY-mm-dd')
-                this.date_pendaftaran_akhir = ress.data.class.akhir_pendaftaran.format('YYYY-mm-dd')
+                 this.date_pendaftaran_awal = ress.data.class.awal_pendaftaran
+                this.date_pendaftaran_akhir = ress.data.class.akhir_pendaftaran
+                 this.date_start_class = ress.data.class.start_class
+                this.date_end_class = ress.data.class.end_class
 
             })
             .catch((err) => console.log(err.response))

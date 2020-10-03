@@ -16,6 +16,7 @@ import JadwalRouter from './routes/Jadwal'
 import LeadsRouter from './routes/Leads'
 import RekeningRouter from './routes/Rekening'
 import VideoRouter from './routes/Video'
+import StudentMenu from './routes/StudentMenu'
 // import Vuetify from 'vuetify'
 // Vue.use(Vuetify)
 import './plugins/vuetify.js'
@@ -48,7 +49,8 @@ const router = new Router({
             JadwalRouter,
             LeadsRouter,
             RekeningRouter,
-            VideoRouter
+            VideoRouter,
+            StudentMenu
         ]
 
     },
@@ -86,7 +88,12 @@ router.beforeEach(async (to,from,next) => {
     if (to.matched.some(record => record.meta.auth)) {
 
         if (store.getters['auth/user']) {
-            next()
+            // if(store.getters['auth/user']['role']['description'] == "Student") {
+            //     next('/dashboard-student')
+            // }else {
+                next()
+            // }
+            
         }else{
             next('/login')
         }
@@ -94,7 +101,11 @@ router.beforeEach(async (to,from,next) => {
         if (!store.getters['auth/user']) {
             next()
         }else{
-            router.push(store.getters['BeforeUrl/url'])
+            if(store.getters['auth/user']['role']['description'] == "Student") {
+                router.push('/dashboard-student')
+            }else {
+                router.push(store.getters['BeforeUrl/url'])
+            }
 
         }
     }else{
