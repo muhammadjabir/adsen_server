@@ -71,6 +71,13 @@ const router = new Router({
     },
 
     {
+        path: '/',
+        redirect : {
+            name: 'login'
+        }
+    },
+
+    {
       path: '*',
       redirect: {
         name: 'notfound'
