@@ -16,6 +16,7 @@ class CreateLogTable extends Migration
         Schema::create('log_history', function (Blueprint $table) {
             $table->id();
             $table->integer('id_user');
+            
             $table->text('deskripsi')->nullable();
             $table->ipAddress('ip');
             $table->string('longitude',150)->nullable();
