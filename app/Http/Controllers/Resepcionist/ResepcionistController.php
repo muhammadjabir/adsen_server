@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Resepcionist;
 
+use App\Helpers\DataManipule;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CalonSiswa\CalonSiswaCollection;
 use App\Jobs\SendInvoiceJobs;
@@ -11,6 +12,9 @@ use App\Models\Followup;
 use App\Models\Kelas;
 use App\Models\Student;
 use App\User;
+use App\Helpers\Log;
+use App\Jobs\SendAccountJobs;
+use App\Mail\SendInvoice;
 use Illuminate\Http\Request;
 use DB;
 
@@ -33,6 +37,7 @@ class ResepcionistController extends Controller
         $data->diskon = $data->kelas_pilihan->courses->diskon;
         $data->no_reference = '';
         $data->save();
+        Log::createLog("Mengirim Invoice ke $data->kode_invoice dengan nama $data->nama");
         $data = [
             'nama' => $data->nama,
             'email' => $data->email,
@@ -63,6 +68,8 @@ class ResepcionistController extends Controller
         $data->nowa = $request->nowa;
         $data->kelas = $request->kelas;
         $data->save();
+        $change = json_encode($data);
+        Log::createLog("Mengubah data leads dgn nama $data->nama menjadi $change");
         return response()->json([
             'message' => 'Success Edit data lead'
         ],200);
@@ -96,7 +103,7 @@ class ResepcionistController extends Controller
         $error = 0;
         DB::beginTransaction();
         try {
-            $data = CalonSiswa::findOrFail($request->id);
+            $data = CalonSiswa::with('kelas_pilihan.trainer')->findOrFail($request->id);
             $data->status_pendaftaran = $request->status;
             $data->kelas = $request->kelas;
             if ($data->save()) {
@@ -128,8 +135,9 @@ class ResepcionistController extends Controller
                             throw new \Exception('Gagal tambah users');
                         }
                     }
-                   
-                    
+                    $datas = DataManipule::dataAccount($data);
+                    SendAccountJobs::dispatch($datas);
+                     
                 }
             } else {
                 $error++;
@@ -140,6 +148,9 @@ class ResepcionistController extends Controller
                 DB::commit();
                 $message = 'Berhasil Tambah Menu';
                 $status = 200;
+                $change = json_encode($data);
+                Log::createLog("Mengubah status leads dgn nama $data->nama menjadi $change");
+                
             }
         
         } catch (\Exception $e) {
@@ -157,9 +168,11 @@ class ResepcionistController extends Controller
         $data->id_calon_siswa = $request->id_calon;
         $data->deskripsi = $request->deskipsi;
         $data->save();
+        $calon_siswa = CalonSiswa::with('followup')->findOrFail($request->id_calon);
+        Log::createLog("Melakukan follow up ke $calon_siswa->nama adalah '$data->deskripsi'");
         return response()->json([
             'message' => 'Success Simpan Follow Up',
-            'data' => CalonSiswa::with('followup')->findOrFail($request->id_calon)
+            'data' => $calon_siswa
         ]);
     }
 
@@ -170,6 +183,7 @@ class ResepcionistController extends Controller
             return response()->json([
                 'message' => 'Success Delete Leads'
             ]);
+            Log::createLog("Menghapus data leads $student->nama");
         }
     }
 

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Payment;
 
+use App\Helpers\DataManipule;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CalonSiswa\CalonSiswa as CalonSiswaCalonSiswa;
+use App\Jobs\SendAccountJobs;
 use App\Models\CalonSiswa;
 use App\Models\Courses;
 use App\Models\Student;
@@ -175,14 +177,17 @@ class PaymentController extends Controller
         $error = 0;
         DB::beginTransaction();
         try {
-            $data = CalonSiswa::where('no_reference',$request->reference_no)->first();
+            $data = CalonSiswa::with('kelas_pilihan.trainer')->where('no_reference',$request->reference_no)->first();
             if (!$data) {
                $data = $this->check_invoice($request->reference_no);
                if ($data->successful()) {
                 //    $data = $data->json();
                    $no_invoice = explode("RH",$data->json()['data']['invoice_no']);
                    $no_invoice = $no_invoice[1];
-                   $data = CalonSiswa::where('kode_invoice',$no_invoice)->first();
+                   $data = CalonSiswa::with('kelas_pilihan.trainer')->where('kode_invoice',$no_invoice)->first();
+               } else {
+                    $error++;
+                    throw new \Exception('Data Tidak ditemukan');
                }
             }
             $data->status_pendaftaran = 1;
@@ -214,6 +219,8 @@ class PaymentController extends Controller
                         throw new \Exception('Gagal tambah users');
                     }
                 }
+                $datas = DataManipule::dataAccount($data);
+                SendAccountJobs::dispatch($datas);
             } else {
                 $error++;
                 throw new \Exception('Gagal mengubah status Leads');

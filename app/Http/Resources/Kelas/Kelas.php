@@ -17,9 +17,9 @@ class Kelas extends JsonResource
         $date_now = \Carbon\Carbon::now();
         $selisi = $date_now->diffInDays($this->start_class->format('Y-m-d'),false);
         $selisi_end = $date_now->diffInDays($this->end_class->format('Y-m-d'),false);
-        if ($selisi <= 0) {
+        if ($selisi <= 0 && $selisi_end > 0) {
             $status = 'Sedang Berjalan';
-        } else if($selisi >= 0) {
+        } else if($selisi >= 0 && $selisi_end > 0 ) {
             $status = 'Belum Berjalan';
         } else if($selisi_end <= 0 ) {
             $status = 'Telah Selesai';

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Courses;
 
+use App\Helpers\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Courses;
 use Illuminate\Http\Request;
@@ -36,7 +37,7 @@ class CoursesController extends Controller
             $courses = Courses::with('category');
         }
 
-        return $courses->paginate(15);
+        return $courses->orderBy('created_at','desc')->paginate(15);
     }
 
     /**
@@ -58,6 +59,7 @@ class CoursesController extends Controller
         $courses = Courses::findOrFail($request->id);
         $courses->status = !$courses->status;
         $courses->save();
+        Log::createLog('Change status courses');
         return response()->json([
             'message' => 'Berhasil Change Status '
         ],200);
@@ -101,6 +103,7 @@ class CoursesController extends Controller
         }
         $courses->created_by=auth()->user()->id;
         $courses->save();
+        Log::createLog("Menambah courses baru $request->name");
         return response()->json([
             'message' => 'Success Create Courses'
         ],200);
@@ -174,8 +177,9 @@ class CoursesController extends Controller
             $foto =  $request->file('foto')->store('foto_courses','public');
             $courses->foto = $foto;
         }
-        $courses->created_by=auth()->user()->id;
         $courses->save();
+        $edit = json_encode($courses);
+        Log::createLog("Edit courses $edit");
         return response()->json([
             'message' => 'Success Edit Courses'
         ],200);
@@ -197,6 +201,7 @@ class CoursesController extends Controller
         }
 
         $courses->delete();
+        Log::createLog("Hapus courses $courses->name");
         return response()->json([
             'message' => 'Success delete Courses'
         ],200);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Kelas;
 
+use App\Helpers\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Kelas\Kelas as KelasKelas;
 use App\Models\Courses;
@@ -25,9 +26,11 @@ class KelasController extends Controller
                     ->orWhereHas('trainer',function($q) use ($request){
                         $q->where('name','LIKE',"%{$request->keyword}%");
                     })
+                    ->orderBy('created_at','desc')
                     ->paginate(15);
         }else{
             $kelas = Kelas::with(['courses','kelasHasDay','trainer'])
+            ->orderBy('created_at','desc')
             ->paginate(15);
 
         }
@@ -110,6 +113,8 @@ class KelasController extends Controller
                 DB::commit();
                 $message = 'Success Create New Class';
                 $status = 200;
+                Log::createLog("Tambah Kelas $request->name");
+
             }
 
         } catch (\Exception $e) {
@@ -225,6 +230,8 @@ class KelasController extends Controller
                 DB::commit();
                 $message = 'Success Edit Class';
                 $status = 200;
+                Log::createLog("Edit Class $class");
+
             }
 
         } catch (\Exception $e) {
@@ -255,6 +262,8 @@ class KelasController extends Controller
         }
 
         $class->delete();
+        Log::createLog("Hapus Class $class->name");
+
         return response()->json([
             'message' => 'Success delete Class'
         ],200);
@@ -264,11 +273,15 @@ class KelasController extends Controller
         $class = Kelas::findOrFail($request->id);
         if ($request->status == 'pendaftaran') {
         $class->status_pendaftaran = !$class->status_pendaftaran;
+        $pesan = "Pendaftaran" ;
 
         } else {
         $class->status = !$class->status;
+        $pesan = "Kelas" ;
+
         }
         $class->save();
+        Log::createLog("Ubah status $pesan Class $class->name");
         return response()->json([
             'message' => 'Berhasil Change Status '
         ],200);

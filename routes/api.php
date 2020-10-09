@@ -68,7 +68,6 @@ Route::resource('courses', 'Courses\CoursesController');
 Route::resource('leads', 'Resepcionist\ResepcionistController');
 Route::resource('rekening', 'Rekening\RekeningController');
 Route::resource('video', 'Video\VideoController');
-
 Route::resource('students', 'Students\StudentsController');
 
 });
