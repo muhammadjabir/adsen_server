@@ -31,6 +31,12 @@ Route::get('/test/email',function(){
     $data = CalonSiswa::with(['kelas_pilihan.courses'])->find(3);
     return view('email',compact('data'));
 });
+
+Route::get('/test/invoice',function(){
+    $data = CalonSiswa::findOrFail(15);
+    return view('invoice',compact('data'));
+});
+
 // Route::get('/',function(){
 //     return redirect('/jadwal');
 // });

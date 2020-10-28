@@ -56,7 +56,7 @@
 
             <tbody>
                 <tr>
-                    <td>{{$data['nama']}}</td>
+                    <td>{{$data['nama_kelas']}}</td>
                  
                     <td>
                         <ul>

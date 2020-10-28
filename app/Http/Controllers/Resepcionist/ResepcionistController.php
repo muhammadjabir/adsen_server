@@ -20,34 +20,66 @@ use DB;
 
 class ResepcionistController extends Controller
 {
-    public function sendInvoice($id){
-        $data = CalonSiswa::with(['kelas_pilihan'=>function($q){
-            $q->withTrashed()->with(['courses'=>function($q){
-                $q->withTrashed();
-            }]);
-        }])->findOrFail($id);
-        $category_courses = $data->kelas_pilihan->courses->category_courses ? $data->kelas_pilihan->courses->category_courses->description : '';
-        if ($category_courses == 'Career Program') {
-            $id_category = $data->kelas_pilihan->courses->category->id;
-            $courses = Courses::where('id_category',$id_category)->where('id','!=',$data->kelas_pilihan->courses->id)->get();
-        }else {
-            $courses = [$data->kelas_pilihan->courses];
-        }    
-        $data->harga = $data->kelas_pilihan->courses->harga;
-        $data->diskon = $data->kelas_pilihan->courses->diskon;
-        $data->no_reference = '';
-        $data->save();
-        Log::createLog("Mengirim Invoice ke $data->kode_invoice dengan nama $data->nama");
-        $data = [
-            'nama' => $data->nama,
-            'email' => $data->email,
-            'encrypt_invoice' => $data->encrypt_invoice,
-            'kelas_pilihan' => $data->kelas_pilihan->name,
-            'category_courses' => $category_courses,
-            'courses' => $courses
-        ];
-        // return view('email',$data);
-       SendInvoiceJobs::dispatch($data);
+    public function sendInvoice(Request $request,$id){
+        $error = 0;
+
+        DB::beginTransaction();
+        try {
+            $data = CalonSiswa::with(['kelas_pilihan'=>function($q){
+                $q->withTrashed()->with(['courses'=>function($q){
+                    $q->withTrashed();
+                }]);
+            }])->findOrFail($id);
+            
+            $category_courses = $data->kelas_pilihan->courses->category_courses ? $data->kelas_pilihan->courses->category_courses->description : '';
+            if ($category_courses == 'Career Program') {
+                $id_category = $data->kelas_pilihan->courses->category->id;
+                $courses = Courses::where('id_category',$id_category)->where('id','!=',$data->kelas_pilihan->courses->id)->get();
+            }else {
+                $courses = [$data->kelas_pilihan->courses];
+            }    
+            $data->harga = $data->kelas_pilihan->courses->harga;
+            $data->diskon = $data->kelas_pilihan->courses->diskon;
+            $data->no_reference = '';
+            $data->link_invoice = $request->link_invoice;
+            if($data->save()){
+                Log::createLog("Mengirim Invoice ke $data->kode_invoice dengan nama $data->nama");
+                $data = [
+                    'nama' => $data->nama,
+                    'email' => $data->email,
+                    'link_invoice' => $data->link_invoice,
+                    'kelas_pilihan' => $data->kelas_pilihan->name,
+                    'category_courses' => $category_courses,
+                    'courses' => $courses
+                ];
+                if(SendInvoiceJobs::dispatch($data)){
+                    $message = 'Berhasil send invoice';
+                } else {
+                    $error++;
+                    throw new \Exception("Gagal Mengirim Invoice");
+                }
+            } else {
+                $error++;
+                throw new \Exception("Gagal Mengirim Invoice");
+                
+            }
+
+            if ($error === 0) {
+                DB::commit();
+                $message = 'Berhasil send invoice';
+                $status = 200;
+            }
+ 
+        } catch (\Exception $e) {
+            DB::rollback();
+            $message = $e->getMessage();
+            $status = 500;
+        }
+
+        return response()->json([
+            'message' => $message
+        ],$status);
+        
 
     }
 
@@ -154,6 +186,7 @@ class ResepcionistController extends Controller
             }
         
         } catch (\Exception $e) {
+            DB::rollback();
             $message = $e->getMessage();
             $status = 500;
         }

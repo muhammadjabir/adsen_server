@@ -72,9 +72,11 @@ class ClassApi extends Controller
                 'message' => 'Silakan Menunggu dihubungi CS kami'
             ],400);
         }
-        $id_kelas = Kelas::where('slug',$request->kelas)->first();
+        $id_kelas = Kelas::with('courses')->where('slug',$request->kelas)->first();
         $tgl = \Carbon\Carbon::now();
-        $kode = CalonSiswa::whereYear('created_at',$tgl->format('Y'))->whereMonth('created_at',$tgl->format('m'))->orderBy('created_at','desc')
+        $kode = CalonSiswa::whereYear('created_at',$tgl->format('Y'))
+        ->whereMonth('created_at',$tgl->format('m'))
+        ->orderBy('created_at','desc')
         ->first();
         $kode = $kode ? $kode->kode_invoice + 1 : $tgl->format('Ym') . '001';
         $data = new CalonSiswa();
@@ -90,7 +92,11 @@ class ClassApi extends Controller
         $data->tgl_lahir = $request->tgl_lahir;
         $data->catatan = $request->catatan;
         $data->id_darimana = $cek_info->id;
-        $data->encrypt_invoice = hash('sha256', $kode);
+        $data->harga = $id_kelas->courses->harga;
+        $patern = env('MERCHANT_CODE') . ":$kode";
+        $secret = env('MERCHANT_SECRET');
+        $signature = hash_hmac('sha256',$patern,$secret);
+        $data->encrypt_invoice = $signature;
         if($data->save()){
             event(new push($data));
         };

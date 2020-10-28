@@ -6,6 +6,7 @@ class DataManipule{
     public static function dataAccount($data) {
         return $datas = [
             'nama' => $data->nama,
+            'nama_kelas' => $data->kelas_pilihan->name,
             'hari' => $data->kelas_pilihan->hari_masuk,
             'email' => $data->email,
             'start_class' => $data->kelas_pilihan->start_class->format('d-m-Y'),

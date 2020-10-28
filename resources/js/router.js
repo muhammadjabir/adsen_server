@@ -66,6 +66,11 @@ const router = new Router({
         component:()=>import('./views/payment/index.vue')
     },
     {
+        path: '/pembayaran-confirm',
+        name:'pembayaran.confirm',
+        component:()=>import('./views/payment/success.vue')
+    },
+    {
         path: '/404',
         name: 'notfound',
     },

@@ -31,11 +31,8 @@
         Terimakasih Telah mendaftar di Redhunter Academy, kami dari Tim CS Redhunter Academy mendapat kabar bahwa anda ingin melakukan pembayaran Kursus yang telah disepakati.
         <br>
         <br>
-        @php
-            $link = 'pembayaran/courses/'.$data['encrypt_invoice'] ;
-        @endphp
         untuk link pembayaran silakan klik : 
-        <a href="{{route('home.index',[$link])}}">Link Pembayaran</a>
+        <a href="{{$data['link_invoice']}}">Link Pembayaran</a>
         
         <br>
         <br>

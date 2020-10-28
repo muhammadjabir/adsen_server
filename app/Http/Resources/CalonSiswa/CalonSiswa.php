@@ -32,7 +32,9 @@ class CalonSiswa extends JsonResource
             'tgl_lahir' => $this->tgl_lahir,
             'kode_invoice' => $this->kode_invoice,
             'harga' => $this->harga,
-            'followup' => $this->followup
+            'followup' => $this->followup,
+            'signature' =>$this->encrypt_invoice,
+            'harga' => $this->harga
         ];
     }
 }

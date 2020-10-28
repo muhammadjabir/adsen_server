@@ -74,9 +74,10 @@
                                     <v-btn color="primary" v-on:click="showLead(item.id)" small dark v-if="item.status_pendaftaran != 1 || user.id_role == 23">
                                         <v-icon>fa-sticky-note</v-icon>
                                     </v-btn>
-                                    <v-btn color="success" :loading="item.loading" v-on:click="sendInvoice(item.id)" small dark v-if="item.status_pendaftaran != 1 || user.id_role == 23">
+                                    <v-btn color="success" @click="openInvoice(item.id)" small dark v-if="item.status_pendaftaran != 1 || user.id_role == 23">
                                         Send Invoice
                                     </v-btn>
+                                    
                                     <!-- <v-btn color="success" v-on:click="edit(item.id)" small dark >
                                         <v-icon>mdi-circle-edit-outline</v-icon>
                                     </v-btn> -->
@@ -140,8 +141,7 @@
             width="750"
             >
                 <v-card>
-                    <v-card-title class="grey darken-4 white--text"
-          primary-title>Data Lead</v-card-title>
+                    <v-card-title class="grey darken-4 white--text" primary-title>Data Lead</v-card-title>
 
                     <v-card-text>
                         <table class="table-lead">
@@ -252,6 +252,56 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
+
+            <v-dialog
+            v-model="dialog_invocie"
+            width="750"
+            >
+                <v-card>
+                    <v-card-title class="grey darken-4 white--text" primary-title>Data Lead</v-card-title>
+
+                    <v-card-text>
+                        <form action="https://pga.growinc.dev/webapi/pay/create" method="post" target="_blank">
+                        <input type="hidden" name="signature" :value="lead.signature">
+                        <input type="hidden" name="merchant_code" value="PGA20MSVE">
+                        <input type="hidden" name="invoice_no" :value="`RH` + lead.kode_invoice">
+                        <input type="hidden" name="description" :value="`pembelian kelas ` + lead.kelas">
+                        <input type="hidden" name="amount" :value="lead.harga - 3500">
+                        <input type="hidden" name="customer_name" :value="lead.nama">
+                        <input type="hidden" name="customer_email" :value="lead.email">
+                        <input type="hidden" name="customer_phone" :value="lead.nohp">
+                        <input type="hidden" name="redirect_url" value="https://development.codehunter.academy/api/v1/payment/courses">
+                        <input type="hidden" name="expired" value="24">
+                        <input type="submit" value="Create">
+                        </form>
+
+                        <v-text-field
+                                v-model="link_invoice"
+                                label="Link Invoice"
+                                required
+                        ></v-text-field>
+                    </v-card-text>
+                    <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <v-btn
+                        text
+                        @click="close()"
+                    >
+                        Cancel
+                    </v-btn>
+
+                    <v-btn
+                        color="success"
+                        text
+                        @click="sendInvoice()"
+                        :disabled="link_invoice == ''"
+                    >
+                        Send
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-container>
     </v-app>
 
@@ -262,9 +312,8 @@ import Pusher from 'pusher-js';
  import Echo from 'laravel-echo';
 export default {
     name: 'leads',
-    data() {
-        return {
-            items: [
+    data: () => ({
+        items: [
                 'All Status',
                 'Cold Leads',
                 'Hot Leads',
@@ -285,9 +334,12 @@ export default {
             deskripsi: '',
             loading_followup : false,
             kelas:[],
-            kelas_pilihan:''
-        }
-    },
+            kelas_pilihan:'',
+            dialog_invocie: false,
+            lead:{},
+            link_invoice:''
+
+      }),
     mixins:[CrudMixin],
     methods: {
         async filterSelect(){
@@ -314,6 +366,10 @@ export default {
             }
 
             this.go()
+        },
+        close(){
+            this.dialog_invocie = false
+            this.dialog_leads = false
         },
         async followup(id_calon){
             let data = new FormData()
@@ -404,13 +460,17 @@ export default {
                 console.log(err)
             })
         },
-
-        async sendInvoice(id){
-            let lead = this.data.find(x => x.id === id)
-            let index = this.data.findIndex(x => x.id === id)
-            lead.loading = true
-            this.data.splice(index,1,lead)
-            await this.axios.post(`/send-invoice/${id}/mail`,{},this.config)
+        async openInvoice(id) {
+            console.log("Test")
+            this.dialog_invocie = true
+            this.lead = this.data.find(x => x.id == id)
+            console.log(this.lead)
+        },
+        async sendInvoice(){
+            let lead = this.lead
+            let data = new FormData()
+            data.append('link_invoice',this.link_invoice)
+            await this.axios.post(`/send-invoice/${this.lead.id}/mail`,data,this.config)
             .then((ress)=>{
                 this.setSnakbar({
                     color:'success',
@@ -425,8 +485,8 @@ export default {
                     status:true
                 })
             })
-            lead.loading = false
-            this.data.splice(index,1,lead)
+            this.link_invoice = ''
+            this.dialog_invocie = false
         },
         getKelas(){
             this.axios.get('get-kelas',this.config)
