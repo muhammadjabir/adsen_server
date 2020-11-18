@@ -174,10 +174,10 @@ class PaymentController extends Controller
             ],400);
         }
         
-        $error = 0;
-        DB::beginTransaction();
+        
         try {
-            
+            $error = 0;
+            DB::beginTransaction();
             $data = $this->check_invoice($request);
             if ($data->successful()) {
             //    $data = $data->json();

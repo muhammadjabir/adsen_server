@@ -44,9 +44,10 @@ class MasterdataController extends Controller
      */
     public function store(Request $request)
     {
-        DB::beginTransaction();
-        $error = 0;
+        
         try {
+            DB::beginTransaction();
+            $error = 0;
             $data = new \App\Models\Masterdata;
             $data->description = $request->masterdata;
             if($data->save()){
@@ -113,8 +114,9 @@ class MasterdataController extends Controller
      */
     public function update(Request $request, $id)
     {
-        DB::beginTransaction();
+     
         try {
+            DB::beginTransaction();
             $id_children = [];
             $message = '';
             $error = 0;

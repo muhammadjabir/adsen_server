@@ -21,10 +21,11 @@ use DB;
 class ResepcionistController extends Controller
 {
     public function sendInvoice(Request $request,$id){
-        $error = 0;
-
-        DB::beginTransaction();
+        
         try {
+            $error = 0;
+
+            DB::beginTransaction();
             $data = CalonSiswa::with(['kelas_pilihan'=>function($q){
                 $q->withTrashed()->with(['courses'=>function($q){
                     $q->withTrashed();
@@ -132,9 +133,10 @@ class ResepcionistController extends Controller
     }
 
     public function changeStatus(Request $request){
-        $error = 0;
-        DB::beginTransaction();
+        
         try {
+            $error = 0;
+            DB::beginTransaction();
             $data = CalonSiswa::with('kelas_pilihan.trainer')->findOrFail($request->id);
             $data->status_pendaftaran = $request->status;
             $data->kelas = $request->kelas;

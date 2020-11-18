@@ -77,9 +77,10 @@ class KelasController extends Controller
             ],400);
         }
 
-        DB::beginTransaction();
-        $error = 0;
+       
         try {
+            DB::beginTransaction();
+            $error = 0;
             $course = Courses::findOrFail($request->id_courses);
             $class = new \App\Models\Kelas;
             $class->name = $request->name;
@@ -200,10 +201,10 @@ class KelasController extends Controller
             ],400);
         }
 
-        DB::beginTransaction();
-        $error = 0;
+        
         try {
-
+            DB::beginTransaction();
+            $error = 0;
             $class = \App\Models\Kelas::findOrFail($id);
             $class->name = $request->name;
             $class->slug = Str::slug($request->name,'-');
