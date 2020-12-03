@@ -37,9 +37,9 @@ Route::get('/test/invoice',function(){
     return view('invoice',compact('data'));
 });
 
-// Route::get('/',function(){
-//     return redirect('/jadwal');
-// });
+Route::get('/',function(){
+    return redirect('/login');
+});
 Route::get('/{any}',function(){
     return view('index');
 })->where('any', '.*')->name('home.index');

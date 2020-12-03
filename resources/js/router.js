@@ -17,6 +17,7 @@ import LeadsRouter from './routes/Leads'
 import RekeningRouter from './routes/Rekening'
 import VideoRouter from './routes/Video'
 import StudentMenu from './routes/StudentMenu'
+import LokerRouter from './routes/Lokers'
 // import Vuetify from 'vuetify'
 // Vue.use(Vuetify)
 import './plugins/vuetify.js'
@@ -50,7 +51,8 @@ const router = new Router({
             LeadsRouter,
             RekeningRouter,
             VideoRouter,
-            StudentMenu
+            StudentMenu,
+            LokerRouter
         ]
 
     },

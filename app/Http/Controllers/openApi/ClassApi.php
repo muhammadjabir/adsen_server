@@ -9,9 +9,15 @@ use App\Models\CalonSiswa;
 use App\Models\MasterDataDetail;
 use Illuminate\Http\Request;
 use App\Events\push;
+use App\Http\Resources\Lokers\LokersCollection;
+use App\Models\Lokers;
 
 class ClassApi extends Controller
 {
+    public function loker() {
+        $data = Lokers::where('status',1)->get();
+        return new LokersCollection($data);
+    }
     public function index(){
         $data = Kelas::with('courses')->where('status_pendaftaran',1)->get();
         $data_info = MasterDataDetail::select('description')->where('id_master_data',10)->get();

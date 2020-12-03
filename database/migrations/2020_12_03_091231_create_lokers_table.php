@@ -18,6 +18,7 @@ class CreateLokersTable extends Migration
             $table->string('judul',100)->nullable();
             $table->text('deskripsi')->nullable();
             $table->string('foto',180)->nullable();
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

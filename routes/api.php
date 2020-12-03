@@ -29,6 +29,7 @@ Route::post('/payment/create','Payment\PaymentController@create_invoice');
 Route::get('/payment/method','Payment\PaymentController@get_method');
 Route::post('/payment/courses/{invoice}','Payment\PaymentController@index');
 Route::post('/v1/payment/courses', 'Payment\PaymentController@pembayaran_success');
+Route::get('/loker/redhunter', 'openApi\ClassApi@loker');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -53,6 +54,7 @@ Route::get('/role-management','Role\RoleManagementController@index');
 Route::post('/role-management','Role\RoleManagementController@store');
 Route::get('/role-management/{id}/edit','Role\RoleManagementController@edit');
 Route::post('/courses/status','Courses\CoursesController@ChangeStatus');
+Route::post('/loker/status','LokerController\LokerController@ChangeStatus');
 Route::post('/class-management/status','Kelas\KelasController@ChangeStatus');
 Route::get('/students/class', 'Students\StudentsController@kelas');
 Route::get('/ganti-status', 'Resepcionist\ResepcionistController@changeStatus');
@@ -69,6 +71,7 @@ Route::resource('leads', 'Resepcionist\ResepcionistController');
 Route::resource('rekening', 'Rekening\RekeningController');
 Route::resource('video', 'Video\VideoController');
 Route::resource('students', 'Students\StudentsController');
+Route::resource('loker', 'LokerController\LokerController');
 
 });
 
